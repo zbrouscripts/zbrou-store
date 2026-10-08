@@ -4,7 +4,7 @@
       <NuxtLink to="/#scripts" class="detail__back">← Volver a la tienda</NuxtLink>
       <div class="detail__grid">
         <div class="detail__media">
-          <img :src="pkg?.image || '/phrasekill-original-cover.svg'" alt="PhraseKill para FiveM" />
+          <img :src="pkg?.image || phrasekillCoverImage" alt="PhraseKill para FiveM" />
           <div class="detail__video"><iframe title="Vídeo de PhraseKill" loading="lazy" src="https://www.youtube-nocookie.com/embed/AYea1bq0pv4" allow="encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
         </div>
         <div class="detail__info">
@@ -35,6 +35,7 @@
 </template>
 <script setup lang="ts">
 import type { Package } from "~/types";
+import { phrasekillCoverImage } from "~/utils/brandImages";
 useSeoMeta({ title: "PhraseKill · ZBrou Scripts", description: "PhraseKill: mensajes de eliminación personalizados para FiveM. Consulta sus opciones, demostración y disponibilidad." });
 const categoryStore = useCategoryStore();
 const basketStore = useBasketStore();
