@@ -14,7 +14,7 @@ export default defineAppConfig({
     // A link to your main site (optional)
     mainSiteUrl: "https://zbrou-store.pages.dev",
     // A discord invite url (optional)
-    discordUrl: "",
+    discordUrl: "https://discord.gg/2u3YXjpf3N",
     // A IP of your server which to display (optional)
     serverIp: "",
     // Reveal the sidebar when an item is added to the cart?

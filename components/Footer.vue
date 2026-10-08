@@ -1,27 +1,28 @@
 <template>
-  <footer class="store-footer">
-    <div class="store-footer__top">
-      <NuxtLink to="/" class="store-footer__brand" aria-label="ZBrou Scripts"><img :src="zbrouBrandImage" width="28" height="28" alt="" /><span>ZBROU SCRIPTS</span></NuxtLink>
-      <div class="store-footer__links"><a href="/#scripts">Scripts</a><a href="https://zbrouscripts.gitbook.io/zbrou-scripts" target="_blank" rel="noopener noreferrer">Documentación</a><a href="https://checkout.tebex.io/terms" target="_blank" rel="noopener noreferrer">Condiciones</a><a href="https://checkout.tebex.io/privacy" target="_blank" rel="noopener noreferrer">Privacidad</a></div>
+  <footer class="zb-footer">
+    <div class="zb-shell">
+      <div class="zb-footer__main">
+        <div class="zb-footer__brand"><NuxtLink to="/" class="zb-brand" aria-label="ZBrou Scripts — Inicio"><img :src="zbrouBrandImage" width="45" height="45" alt="" /><span>ZBROU<small>SCRIPTS</small></span></NuxtLink><p>Scripts con personalidad para FiveM.<br />Tu servidor. Tu estilo.</p><a class="zb-footer__social zb-icon-btn" :href="discordUrl || '/#comunidad'" :target="discordUrl ? '_blank' : undefined" rel="noopener noreferrer" aria-label="Discord de ZBrou"><StoreGlyph name="discord" :size="21" /></a></div>
+        <div class="zb-footer__col"><h3>Explora ZBrou</h3><a href="/#inicio">Inicio</a><a href="/#scripts">Todos los scripts</a><a href="https://zbrouscripts.gitbook.io/zbrou-scripts" target="_blank" rel="noopener noreferrer">Documentación <StoreGlyph name="external" :size="12" /></a><a :href="discordUrl || '/#comunidad'" :target="discordUrl ? '_blank' : undefined" rel="noopener noreferrer">Comunidad <StoreGlyph name="discord" :size="13" /></a></div>
+        <div class="zb-footer__col"><h3>Ayuda con tu compra</h3><a href="https://checkout.tebex.io/terms" target="_blank" rel="noopener noreferrer">Condiciones de compra</a><a href="https://www.tebex.io/contact/checkout" target="_blank" rel="noopener noreferrer">Soporte de pagos <StoreGlyph name="external" :size="12" /></a><a href="https://checkout.tebex.io/privacy" target="_blank" rel="noopener noreferrer">Privacidad</a></div>
+      </div>
+      <div class="zb-footer__payments">
+        <p class="zb-footer__payment-label"><StoreGlyph name="shield" :size="17" />Métodos de pago mediante Tebex<small>Disponibilidad según país, moneda y tipo de compra.</small></p>
+        <div class="zb-payment-logos" aria-label="Visa, Mastercard y PayPal">
+          <span class="zb-payment-logo"><svg viewBox="0 0 80 32" role="img" aria-label="Visa"><text x="5" y="26" font-family="Arial,sans-serif" font-size="30" font-weight="900" font-style="italic" fill="#d7e7ff">VISA</text></svg></span>
+          <span class="zb-payment-logo"><svg viewBox="0 0 54 32" role="img" aria-label="Mastercard"><circle cx="20" cy="16" r="13" fill="#e55556"/><circle cx="35" cy="16" r="13" fill="#efb85b" opacity=".9"/></svg></span>
+          <span class="zb-payment-logo zb-payment-logo--paypal"><svg viewBox="0 0 88 32" role="img" aria-label="PayPal"><text x="1" y="24" font-family="Arial,sans-serif" font-size="23" font-weight="700" font-style="italic" fill="#accdff">Pay<tspan fill="#6dbcec">Pal</tspan></text></svg></span>
+        </div>
+      </div>
+      <div class="zb-footer__legal">
+        <div class="zb-footer__legal-top"><a class="zb-footer__tebex" href="https://www.tebex.io/" target="_blank" rel="noopener noreferrer" aria-label="Powered by Tebex"><span>POWERED BY</span><Icon name="tebex" width="66px" :font-controlled="false" /></a><p>Esta web y su proceso de compra están operados por nuestro distribuidor y vendedor oficial, Tebex Limited (Merchant of Record), que también gestiona las consultas sobre pedidos y los reembolsos.</p><div class="zb-footer__legal-links"><a href="https://checkout.tebex.io/impressum" target="_blank" rel="noopener noreferrer">Aviso legal</a><a href="https://checkout.tebex.io/terms" target="_blank" rel="noopener noreferrer">Condiciones</a><a href="https://checkout.tebex.io/privacy" target="_blank" rel="noopener noreferrer">Privacidad</a></div></div>
+        <div class="zb-footer__copyright"><span>© {{ year }} ZBrou Scripts. Todos los derechos reservados.</span><span>ZBrou Scripts no está afiliado a Rockstar Games ni a Take-Two Interactive.</span></div>
+      </div>
     </div>
-    <div class="store-footer__bottom"><span>© 2026 ZBrou Scripts.</span><span>Pagos y pedidos gestionados por <a href="https://www.tebex.io/" target="_blank" rel="noopener noreferrer">Tebex</a> como vendedor oficial.</span></div>
   </footer>
 </template>
 <script setup lang="ts">
 import { zbrouBrandImage } from "~/utils/brandImages";
+const year = new Date().getFullYear();
+const discordUrl = computed(() => String(useRuntimeConfig().public.discordUrl || useAppConfig().discordUrl || ""));
 </script>
-<style scoped>
-.store-footer{background:#080a0e;color:#8796a9;border-top:1px solid #ffffff1e;font-family:Manrope,Arial,sans-serif}
-.store-footer__top,.store-footer__bottom{max-width:1200px;margin:auto;padding-inline:20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.store-footer__top{min-height:110px}
-.store-footer__brand{display:flex;align-items:center;gap:10px;color:#e7eef9;font:700 13px Oxanium,Arial,sans-serif;letter-spacing:.08em;text-decoration:none}
-.store-footer__brand img{width:30px;height:30px;object-fit:contain}
-.store-footer__links{display:flex;gap:24px;flex-wrap:wrap}
-.store-footer__links a{color:#9caec6;font-size:12px;text-decoration:none}
-.store-footer__links a:hover{color:white}
-.store-footer__bottom{padding-block:18px 27px;border-top:1px solid #ffffff13;font-size:11px}
-.store-footer__bottom a{color:#bdd5ef}
-@media(max-width:700px){.store-footer__top,.store-footer__bottom{flex-direction:column;align-items:flex-start}.store-footer__top{padding-top:27px;padding-bottom:25px}.store-footer__bottom{padding-top:20px}.store-footer__links{gap:15px}}
-.store-footer{background:#000;border-top:0}.store-footer__top,.store-footer__bottom{width:min(1160px,calc(100% - 96px));padding-inline:0}.store-footer__brand img{width:64px;height:64px;mix-blend-mode:screen}.store-footer__brand span{display:none}.store-footer__links a{font-size:11px}.store-footer__bottom{font-size:10px;color:#8290a4}
-@media(max-width:700px){.store-footer__top,.store-footer__bottom{width:calc(100% - 40px)}}
-</style>

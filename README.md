@@ -1,32 +1,67 @@
 # ZBrou Store
 
-Tienda oficial de ZBrou Scripts, en español. Nuxt + Cloudflare Pages + Tebex Headless.
+Tienda oficial ZBrou Scripts, en español. Nuxt + Cloudflare Pages + Tebex Headless.
+La única tienda pública es https://zbrou-store.pages.dev, desplegada desde main.
 
-La única tienda pública es https://zbrou-store.pages.dev y se despliega desde main.
+## Diseño actual
 
-## Referencias de diseño
+Logo y portadas originales del ZIP, Oxanium/Manrope, cristal oscuro y acentos azul hielo.
+Cabecera con navegación centrada, Discord, cesta y acceso FiveM. Fondo con auroras,
+partículas y estelas; reflejos y profundidad en tarjetas, brillo en botones, paralaje
+del logo y carrusel de actividad. La pausa controla todos los efectos sin colapsar la
+página. Se respeta reducir movimiento salvo que el usuario active expresamente la
+animación, y su elección se guarda.
 
-Se conserva la identidad de la preview aprobada zbrou-glass-scroll.html y la versión compacta zbrou-preview-para-otro-chat.zip: portada negra de pantalla completa, logo original, Oxanium/Manrope, estrellas y cometas, cabecera de cristal y catálogo azul oscuro.
+Las portadas, nombres y enlaces de detalle abren la ficha en otra pestaña.
+El carrito sobre la portada añade el paquete real a la cesta y solicita acceso FiveM
+si es necesario. Los nuevos paquetes disponen automáticamente de /script/{id};
+PhraseKill conserva /script/phrasekill y su presentación personalizada.
+La ficha tiene su propia página. Los diálogos quedan para acceso y las operaciones
+del checkout original. NuxtPage conserva las rutas anidadas de autenticación,
+variables y regalos de Tebex.
 
-Los ajustes posteriores del usuario también se respetan: sin círculos ni marcos alrededor del logo, PhraseKill como único producto, tarjeta pequeña, Añadir a la cesta encima de Ver detalles, ficha en un diálogo y reflejo al mover el cursor. /script/phrasekill conserva un enlace directo al mismo contenido.
+## Catálogo y nuevos scripts
 
-El scroll controla la transición desde el logo hasta Scripts. La animación se puede pausar y respeta reducir movimiento. Búsqueda, diálogos y cesta conservan controles de teclado.
+Los productos proceden del catálogo público de Tebex. Para añadir uno, crear un
+paquete en Tebex con nombre, descripción, portada, precio y entrega, asignarlo a una
+categoría visible y publicarlo. Su tarjeta, categoría, precio, compra y ficha aparecen
+automáticamente en la tienda al recargar; no es necesario editar tarjetas en código.
+La descripción se muestra como texto seguro. El checkout calcula el importe final.
 
-## Comercio y configuración
+Los productos, perfiles y cifras de demostración se han retirado del código.
 
-Los precios, la disponibilidad, el acceso FiveM y el checkout proceden de Tebex. Cuando el catálogo no devuelve el producto, la compra permanece desactivada. No se muestra un precio inventado.
+El único producto real sigue siendo PhraseKill. Su precio, disponibilidad,
+autenticación y checkout proceden de Tebex. Si Tebex no devuelve el paquete, se
+muestra Próximamente y no se permite comprar. No se ha inventado un precio real.
+El vídeo provisional se retiró y no se muestra ningún vídeo hasta tener el correcto.
 
-Variables de Cloudflare:
+## Configuración
 
-- NITRO_PRESET=cloudflare_pages
+- NITRO_PRESET=cloudflare_pages para compilar para Cloudflare.
 - NUXT_PUBLIC_API_PUBLIC_KEY: token público de Tebex.
-- NUXT_API_PRIVATE_KEY: secreto privado, solo si se necesita; nunca publicarlo.
-- NUXT_PUBLIC_PHRASEKILL_VIDEO_ID: identificador de un vídeo real de PhraseKill. El antiguo vídeo provisional se retiró; no se presenta como demostración del producto.
+- NUXT_API_PRIVATE_KEY: secreto privado solo si la integración lo necesita.
+- NUXT_PUBLIC_PHRASEKILL_VIDEO_ID: ID de un vídeo real de PhraseKill.
+- NUXT_PUBLIC_DISCORD_URL: invitación opcional que sustituye la de app.config.ts.
+- NUXT_ZBROU_USAGE_ENDPOINT y NUXT_ZBROU_USAGE_TOKEN: fuente privada HTTPS de
+  métricas agregadas; devuelve serversActive, playersOnline, installations, updatedAt.
+- NUXT_ZBROU_COMMUNITY_ENDPOINT y NUXT_ZBROU_COMMUNITY_TOKEN: fuente HTTPS de datos
+  aprobados para publicación. Devuelve satisfaction (0–100) y purchases:
+  [{name, product, avatar: URL HTTPS opcional, time: fecha ISO}].
+  No conectar una respuesta privada de pagos sin filtrar ni publicar datos sin permiso.
 
-/api/usage sigue disponible para la integración de estadísticas agregadas anterior. La home se centra en la tienda y no añade bloques vacíos de métricas.
+Sin fuentes reales, /api/usage y /api/community devuelven datos vacíos y la tienda
+no presenta ventas ni valoraciones inventadas. El feed real se actualiza cada minuto
+mientras la pestaña está visible. Los tokens permanecen exclusivamente en el servidor.
+El pie mantiene la identidad de Tebex, aviso legal, condiciones, privacidad, soporte
+de pagos y Visa/Mastercard/PayPal con aviso de disponibilidad.
 
 ## Verificación
 
-npm ci y npm run build. Comprobar escritorio, móvil, desplazamiento, buscador, apertura/cierre del diálogo, navegación directa a la ficha, cesta y reducir movimiento. Después de publicar en main, verificar el check de Cloudflare Pages y la tienda principal.
+npm ci --ignore-scripts; npm run build con el preset apropiado.
+Revisar 1920, 1280, 390 y 320 píxeles, centrado, desbordamientos, búsquedas,
+filtros, ordenación, enlaces en otra pestaña, acceso FiveM, cesta y pausa/reanudación.
+Antes de publicar en main, revisar el
+estado remoto y, después, esperar la confirmación del despliegue de Cloudflare.
 
-Las fuentes originales incluyen su licencia en public/fonts/OFL.txt.
+Las fuentes originales conservan su licencia en public/fonts/OFL.txt.
+

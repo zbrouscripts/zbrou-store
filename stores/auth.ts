@@ -50,11 +50,14 @@ export const useAuthStore = defineStore("auth", () => {
             await basketStore.createBasket();
         }
 
-        // Redirect to external redirect page
+        const returnUrl = new URL("/", window.location.origin);
+        returnUrl.searchParams.set("success", "true");
+        if (redirectAfter?.startsWith("/") && !redirectAfter.startsWith("//")) {
+            returnUrl.searchParams.set("redirect", redirectAfter);
+        }
         return await getBasketAuthMethods(
             basketStore.basket.ident,
-            window.location.origin +
-                (redirectAfter ? `?redirect=${redirectAfter}` : ""), // Go back to the home page
+            returnUrl.toString(),
         );
     }
 
@@ -89,7 +92,7 @@ export const useAuthStore = defineStore("auth", () => {
     function getLoginRoute(redirectAfter?: string) {
         return (
             loginRoute.value +
-            (redirectAfter ? `?redirect=${redirectAfter}` : "")
+            (redirectAfter ? `?redirect=${encodeURIComponent(redirectAfter)}` : "")
         );
     }
 

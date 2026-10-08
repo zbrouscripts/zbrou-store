@@ -19,6 +19,8 @@ export function useAPI<T = unknown>(
 
     return $fetch<T>(url, {
         baseURL,
+        timeout: 10000,
+        retry: 0,
 
         onResponse({ response }) {
             const hasError =

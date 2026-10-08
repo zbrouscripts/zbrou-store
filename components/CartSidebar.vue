@@ -47,7 +47,6 @@
 </template>
 
 <script setup lang="ts">
-import { isClient } from "@vueuse/core";
 import confetti from "canvas-confetti";
 import { defu } from "defu";
 
@@ -115,20 +114,18 @@ const onPaymentComplete = () => {
 };
 
 onMounted(async () => {
-    await until(() => window?.Tebex).toBeTruthy();
-
-    basketStore.getBasket();
-
-    if (isClient) {
+    basketStore.getBasket().catch(() => {});
+    try {
+        await until(() => window.Tebex).toBeTruthy({ timeout: 10000, throwOnTimeout: true });
         window.Tebex.checkout.on("payment_complete", onPaymentComplete);
 
         window.Tebex.checkout.on("close", () => {
             // Refresh the basket
             if (basketStore.basket?.ident) {
-                basketStore.getBasket();
+                basketStore.getBasket().catch(() => {});
             }
         });
-    }
+    } catch { /* The payment button also supports Tebex's hosted checkout. */ }
 });
 
 const checkout = async () => {
@@ -136,7 +133,8 @@ const checkout = async () => {
         return;
     }
 
-    uiStore.toggleItem("cart-sidebar");
+    if (!basketStore.basket.packages.length) return;
+    uiStore.toggleItem("cart-sidebar", false);
 
     const config = defu<TebexCheckoutConfig, [{ ident: string }]>(
         appConfig.tebexJsConfig,
@@ -145,10 +143,12 @@ const checkout = async () => {
         },
     );
 
-    if (isClient) {
+    if (window.Tebex) {
         window.Tebex.checkout.init(config);
 
         window.Tebex.checkout.launch();
+    } else {
+        window.location.assign("https://pay.tebex.io/" + encodeURIComponent(basketStore.basket.ident));
     }
 };
 

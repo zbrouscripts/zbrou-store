@@ -62,12 +62,12 @@ select {
 
 /* Remove all animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
-  html:focus-within {
+  html:not([data-zb-motion="on"]):focus-within {
     scroll-behavior: auto;
   }
-  *,
-  *::before,
-  *::after {
+  html:not([data-zb-motion="on"]) *,
+  html:not([data-zb-motion="on"]) *::before,
+  html:not([data-zb-motion="on"]) *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

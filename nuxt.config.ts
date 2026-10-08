@@ -23,9 +23,12 @@ export default defineNuxtConfig({
         // Optional aggregate statistics integration; private token stays server-side.
         zbrouUsageEndpoint: "",
         zbrouUsageToken: "",
+        zbrouCommunityEndpoint: "",
+        zbrouCommunityToken: "",
 
         // Config that will be exposed to the client
         public: {
+            discordUrl: "",
             phrasekillVideoId: "",
             apiPublicKey: "",
             apiBaseUrl: "https://headless.tebex.io",

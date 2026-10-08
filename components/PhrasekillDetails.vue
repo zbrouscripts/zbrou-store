@@ -20,7 +20,7 @@
           <div class="detail__purchase">
             <span>PRECIO</span>
             <strong>{{ pkg ? $n(pkg.base_price, "currency") : "Próximamente" }}</strong>
-            <button type="button" :disabled="!pkg || loading" @click="addToBasket">{{ !pkg ? 'Aún no disponible' : loading ? 'Añadiendo…' : 'Añadir a la cesta' }}</button>
+            <button class="zb-btn zb-btn--primary" type="button" :disabled="!pkg || busyId !== null" @click="addToBasket">{{ !pkg ? 'Aún no disponible' : busyId === pkg.id ? 'Añadiendo…' : 'Añadir a la cesta' }}</button>
             <p v-if="message" role="status">{{ message }}</p>
             <small>El precio procede de Tebex. Las compras se procesan mediante Tebex.</small>
           </div>
@@ -36,27 +36,23 @@
 <script setup lang="ts">
 import type { Package } from "~/types";
 import { phrasekillCoverImage } from "~/utils/brandImages";
+import { isPhrasekill } from "~/utils/storeCatalog";
 
 const categoryStore = useCategoryStore();
-const basketStore = useBasketStore();
-const uiStore = useUIStore();
+const { busyId, addProduct } = useProductCart();
 const emit = defineEmits<{ added: [] }>();
 const videoId = computed(() => String(useRuntimeConfig().public.phrasekillVideoId || ""));
 const { data: categories } = await useAsyncData("categories", () => categoryStore.fetchCategories());
-const pkg = computed<Package | undefined>(() => (categories.value ?? []).flatMap((c) => c.packages ?? []).find((p) => p.id === 7706999 || /phrase\s*kill/i.test(p.name)));
-const loading = ref(false);
+const pkg = computed<Package | undefined>(() => (categories.value ?? []).flatMap((c) => c.packages ?? []).find(isPhrasekill));
 const message = ref("");
 async function addToBasket() {
-  if (!pkg.value || loading.value) return;
-  loading.value = true;
+  if (!pkg.value || busyId.value !== null) return;
   message.value = "";
   try {
-    const basket = await basketStore.addPackageToBasket(pkg.value.id, 1);
-    if (basket) { emit('added'); uiStore.toggleItem("cart-sidebar"); }
+    await addProduct(pkg.value);
+    emit('added');
   } catch {
     message.value = "No se ha podido añadir el producto. Inténtalo de nuevo.";
-  } finally {
-    loading.value = false;
   }
 }
 </script>

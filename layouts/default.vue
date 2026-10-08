@@ -1,5 +1,6 @@
 <template>
     <div class="layout layout--default">
+        <StoreStarfield :enabled="motionEnabled" />
         <Header />
 
         <MenuSidebar />
@@ -13,6 +14,10 @@
         <Footer />
     </div>
 </template>
+
+<script setup lang="ts">
+const { enabled: motionEnabled } = useStoreMotion();
+</script>
 
 <style lang="scss" scoped>
 @use "~/assets/styles/settings" as *;

@@ -11,6 +11,7 @@
         <div class="modal" ref="modal" tabindex="0" :style="style">
             <Button
                 class="modal__close"
+                aria-label="Cerrar ventana"
                 variant="clear"
                 @click="closeModal"
                 icon="close"
@@ -36,6 +37,7 @@ const model = defineModel<boolean>({ default: false });
 const emit = defineEmits(["close", "hidden"]);
 
 const modal = ref<HTMLElement | null>(null);
+let returnFocus: HTMLElement | null = null;
 
 const style = computed(() => ({
     maxWidth: props.width,
@@ -44,6 +46,7 @@ const style = computed(() => ({
 const { activate, deactivate } = useFocusTrap(modal, { initialFocus: false });
 
 const onAfterEnter = async () => {
+    returnFocus = document.activeElement as HTMLElement;
     document.body.style.overflow = "hidden";
 
     // Trap focus within modal
@@ -54,6 +57,8 @@ const onBeforeLeave = async () => {
     document.body.style.overflow = "";
 
     deactivate();
+
+    returnFocus?.focus();
 
     emit("hidden");
 };
@@ -67,6 +72,11 @@ const closeModal = () => {
         emit("close");
     });
 };
+const handleEscape = (event: KeyboardEvent) => {
+    if (event.key === "Escape" && model.value) closeModal();
+};
+onMounted(() => document.addEventListener("keydown", handleEscape));
+onUnmounted(() => document.removeEventListener("keydown", handleEscape));
 </script>
 
 <style lang="scss">

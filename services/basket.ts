@@ -62,5 +62,6 @@ export const giftPackage = (
 export const getBasketAuthMethods = (basketId: string, returnUrl: string) =>
     useAPI<BasketAuthMethod[]>(
         "accounts",
-        `/baskets/${basketId}/auth?returnUrl=${returnUrl}`,
+        `/baskets/${basketId}/auth`,
+        { query: { returnUrl } },
     );

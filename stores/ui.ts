@@ -6,9 +6,9 @@ export const useUIStore = defineStore("ui", () => {
     return {
         showOverlay,
         toggleItem(item: string, value?: boolean) {
-            const show = value || !overlayedItems.value.includes(item);
+            const show = value ?? !overlayedItems.value.includes(item);
             if (show) {
-                overlayedItems.value = [...overlayedItems.value, item];
+                overlayedItems.value = [...new Set([...overlayedItems.value, item])];
             } else {
                 overlayedItems.value = overlayedItems.value.filter(
                     (i) => i !== item,

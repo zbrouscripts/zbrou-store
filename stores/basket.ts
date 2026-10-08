@@ -108,20 +108,28 @@ export const useBasketStore = defineStore("basket", () => {
 
     // Flush any pending actions and perform them
     async function flushActions() {
-        for (const action of pendingActions.value) {
-            if (action.type === "add") {
-                await addPackageToBasket(action.packageId, action.quantity);
-            } else if (action.type === "gift" && action.targetUsername) {
-                await giftPackage(action.packageId, action.targetUsername);
+        const actions = [...pendingActions.value];
+        clearPendingActions();
+        for (const action of actions) {
+            try {
+                if (action.type === "add") {
+                    if (!packages.value.has(action.packageId)) {
+                        await addPackageToBasket(action.packageId, action.quantity);
+                    }
+                } else if (action.type === "gift" && action.targetUsername) {
+                    await giftPackage(action.packageId, action.targetUsername);
+                }
+            } catch {
+                toastStore.addToast(t("error.cannot_add_package"), { type: "error" });
             }
         }
-
-        clearPendingActions();
     }
 
     // Add an action to be performed after login
     async function addPendingAction(action: BasketAction) {
-        pendingActions.value.push(action);
+        if (!pendingActions.value.some(item => item.type === action.type && item.packageId === action.packageId && item.targetUsername === action.targetUsername)) {
+            pendingActions.value.push(action);
+        }
     }
 
     // Watch for authentication changes and flush any pending actions
@@ -129,7 +137,7 @@ export const useBasketStore = defineStore("basket", () => {
         () => authStore.isAuthenticated,
         async (isAuthenticated, prevValue) => {
             if (isAuthenticated && !prevValue) {
-                flushActions();
+                await flushActions();
             }
         },
     );
@@ -163,7 +171,7 @@ export const useBasketStore = defineStore("basket", () => {
         // Check if the package requires variables to be set
         const pkg = await services.getPackage(packageId.toString());
 
-        if (pkg.variables && !variables) {
+        if (pkg.variables?.length && !variables) {
             // Store the action to be performed after setting variables
             await router.push(`/package/${packageId}/variables`);
             return;
@@ -172,6 +180,7 @@ export const useBasketStore = defineStore("basket", () => {
         let updatedBasket: Basket;
 
         try {
+            if (!hasBasket.value) await createBasket();
             packagesLoading.add(packageId);
 
             updatedBasket = await services.addPackageToBasket(
