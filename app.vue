@@ -1,6 +1,6 @@
 <template>
     <Head>
-        <link rel="icon" type="image/webp" :href="zbrouBrandImage" />
+        <link rel="icon" type="image/png" :href="zbrouBrandImage" />
     </Head>
 
     <NuxtLayout>
@@ -16,6 +16,7 @@
 <script lang="ts" setup>
 import { zbrouBrandImage } from "~/utils/brandImages";
 import "~/assets/styles/main.scss";
+import "~/assets/styles/brand-fonts.css";
 import { isClient } from "@vueuse/core";
 
 const appConfig = useAppConfig();

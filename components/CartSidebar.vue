@@ -3,6 +3,7 @@
         <template #header>
             <Button
                 class="cart__close"
+                aria-label="Cerrar cesta"
                 variant="clear"
                 @click="uiStore.toggleItem('cart-sidebar')"
                 icon="close"

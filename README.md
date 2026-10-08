@@ -1,33 +1,32 @@
 # ZBrou Store
 
-Tienda independiente de **ZBrou Scripts** para FiveM. Nuxt 3 + Cloudflare Pages + Tebex Headless.
+Tienda oficial de ZBrou Scripts, en español. Nuxt + Cloudflare Pages + Tebex Headless.
 
-## Diseño actual
+La única tienda pública es https://zbrou-store.pages.dev y se despliega desde main.
 
-- Portada compacta en español, inspirada en la maqueta `zbrou-preview-para-otro-chat.zip`.
-- Logotipo original ZBrou y portada original del producto PhraseKill.
-- Inicio, catálogo de scripts y un bloque discreto de servidores.
-- Una tarjeta de PhraseKill en el catálogo, con ficha propia en `/script/phrasekill`.
-- Carrito y autentificación de Tebex conservados desde la plantilla.
-- Los precios proceden exclusivamente del catálogo de Tebex. Si el producto no está publicado, no se puede comprar.
-- Animación ligera del inicio asociada al desplazamiento, con soporte de movimiento reducido.
+## Referencias de diseño
 
-## Publicación
+Se conserva la identidad de la preview aprobada zbrou-glass-scroll.html y la versión compacta zbrou-preview-para-otro-chat.zip: portada negra de pantalla completa, logo original, Oxanium/Manrope, estrellas y cometas, cabecera de cristal y catálogo azul oscuro.
 
-Cloudflare Pages: proyecto `zbrou-store`; rama pública `main`; rama de pruebas `design/phrasekill-showcase`.
+Los ajustes posteriores del usuario también se respetan: sin círculos ni marcos alrededor del logo, PhraseKill como único producto, tarjeta pequeña, Añadir a la cesta encima de Ver detalles, ficha en un diálogo y reflejo al mover el cursor. /script/phrasekill conserva un enlace directo al mismo contenido.
 
-Variables de compilación:
-- `NITRO_PRESET=cloudflare_pages`
-- `NUXT_PUBLIC_API_PUBLIC_KEY=` token público de Tebex
+El scroll controla la transición desde el logo hasta Scripts. La animación se puede pausar y respeta reducir movimiento. Búsqueda, diálogos y cesta conservan controles de teclado.
 
-La clave privada de Tebex se guarda **solo como Secret** en Cloudflare si es necesaria (`NUXT_API_PRIVATE_KEY`). Nunca publicarla ni compartirla en GitHub.
+## Comercio y configuración
 
-## Estadísticas
+Los precios, la disponibilidad, el acceso FiveM y el checkout proceden de Tebex. Cuando el catálogo no devuelve el producto, la compra permanece desactivada. No se muestra un precio inventado.
 
-`/api/usage` no devuelve cifras inventadas. Hasta configurar un proveedor agregado real, muestra valores no disponibles. Para conectarlo sin datos personales ni nombres de servidores, utilizar `NUXT_ZBROU_USAGE_ENDPOINT` y el secreto opcional `NUXT_ZBROU_USAGE_TOKEN`.
+Variables de Cloudflare:
 
-## Comprobaciones
+- NITRO_PRESET=cloudflare_pages
+- NUXT_PUBLIC_API_PUBLIC_KEY: token público de Tebex.
+- NUXT_API_PRIVATE_KEY: secreto privado, solo si se necesita; nunca publicarlo.
+- NUXT_PUBLIC_PHRASEKILL_VIDEO_ID: identificador de un vídeo real de PhraseKill. El antiguo vídeo provisional se retiró; no se presenta como demostración del producto.
 
-`npm ci`, `npm run build`. GitHub Actions comprueba compilación y, si el entorno permite levantar Nuxt, ejecuta `scripts/visual-smoke.mjs` en Chrome para comprobar portada, catálogo, ficha, menú móvil y desbordamientos.
+/api/usage sigue disponible para la integración de estadísticas agregadas anterior. La home se centra en la tienda y no añade bloques vacíos de métricas.
 
-**No fusionar la rama hasta validar la vista previa de Cloudflare y las operaciones reales de compra con Tebex.**
+## Verificación
+
+npm ci y npm run build. Comprobar escritorio, móvil, desplazamiento, buscador, apertura/cierre del diálogo, navegación directa a la ficha, cesta y reducir movimiento. Después de publicar en main, verificar el check de Cloudflare Pages y la tienda principal.
+
+Las fuentes originales incluyen su licencia en public/fonts/OFL.txt.

@@ -22,4 +22,6 @@ import { zbrouBrandImage } from "~/utils/brandImages";
 .store-footer__bottom{padding-block:18px 27px;border-top:1px solid #ffffff13;font-size:11px}
 .store-footer__bottom a{color:#bdd5ef}
 @media(max-width:700px){.store-footer__top,.store-footer__bottom{flex-direction:column;align-items:flex-start}.store-footer__top{padding-top:27px;padding-bottom:25px}.store-footer__bottom{padding-top:20px}.store-footer__links{gap:15px}}
+.store-footer{background:#000;border-top:0}.store-footer__top,.store-footer__bottom{width:min(1160px,calc(100% - 96px));padding-inline:0}.store-footer__brand img{width:64px;height:64px;mix-blend-mode:screen}.store-footer__brand span{display:none}.store-footer__links a{font-size:11px}.store-footer__bottom{font-size:10px;color:#8290a4}
+@media(max-width:700px){.store-footer__top,.store-footer__bottom{width:calc(100% - 40px)}}
 </style>

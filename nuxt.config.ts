@@ -26,6 +26,7 @@ export default defineNuxtConfig({
 
         // Config that will be exposed to the client
         public: {
+            phrasekillVideoId: "",
             apiPublicKey: "",
             apiBaseUrl: "https://headless.tebex.io",
         },
