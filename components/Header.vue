@@ -2,7 +2,7 @@
   <header class="store-header">
     <div class="store-header__inner">
       <NuxtLink class="store-header__brand" to="/" aria-label="ZBrou Scripts — Inicio" @click="menuOpen = false">
-        <img src="/zbrou-original-logo.svg" width="42" height="42" alt="" />
+        <img :src="zbrouBrandImage" width="42" height="42" alt="" />
         <span>ZBROU<small>SCRIPTS</small></span>
       </NuxtLink>
       <nav class="store-header__nav" :class="{ 'store-header__nav--open': menuOpen }" aria-label="Navegación principal">
@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { zbrouBrandImage } from "~/utils/brandImages";
 const authStore = useAuthStore();
 const basketStore = useBasketStore();
 const uiStore = useUIStore();
