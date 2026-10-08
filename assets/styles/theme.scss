@@ -1,37 +1,36 @@
-// You can override the default settings using the SCSS with on the @forward rule for "./settings".
-// More information can be found here https://sass-lang.com/documentation/at-rules/use/#configuration
-
-//  Example of overriding the default settings:
-//
-
-// @forward "./settings" with (
-//   // Base settings
-//   $pure-black: #000000,
-//   $pure-white: #ffffff,
-
-//   // Background
-//   $background-100: #ffffff,
-//   $background-200: #f2f2f2,
-
-//   // Colour pallette
-//   $c-100: #e5e5e5,
-//   $c-200: #d1cfc6,
-//   $c-300: #cccccc,
-//   $c-400: #b2b2b2,
-//   $c-500: #7f7f7f,
-//   $c-600: #666666,
-//   $c-700: #4d4d4d,
-//   $c-800: #333333,
-//   $c-900: #1a1a1a,
-
-//   $primary: #D81B60,
-
-//   $text-high-emphasis-color: #000000,
-//   $text-base-color: #000000,
-
-//   // Components
-//   $modal-close-color: #000000,
-//   $loader-color: rgba(0, 0, 0, 0.6),
-// );
-
-@forward "./settings";
+// ZBrou Store – branded tokens for the existing Tebex UI components.
+// Do not remove @forward: cart, payment and product views depend on these settings.
+@forward "./settings" with (
+  $background-100: #080d16,
+  $background-200: #0d1522,
+  $c-100: #101b2b,
+  $c-200: #18283e,
+  $c-300: #293c56,
+  $c-400: #40516b,
+  $c-500: #8192a9,
+  $c-600: #a4b1c4,
+  $c-700: #c2cee0,
+  $c-800: #dbe4f3,
+  $c-900: #f5f8ff,
+  $primary: #0e58d8,
+  $primary-dark: #0a45b1,
+  $secondary: #dce9ff,
+  $secondary-dark: #c5daf8,
+  $success: #1765ed,
+  $success-dark: #1054cd,
+  $links: #aac7ff,
+  $border-radius-base: 12px,
+  $btn-border-radius: 12px,
+  $header-bg: #080d16,
+  $header-sticky-bg: #0a1322,
+  $header-card-bg: transparent,
+  $package-card-bg: #101b2b,
+  $package-card-image-bg: #152239,
+  $package-card-border-radius: 18px,
+  $category-card-border-radius: 18px,
+  $modal-bg: #101b2b,
+  $modal-border-radius: 18px,
+  $footer-bg: #0d1523,
+  $footer-tebex-bg: #0d1523,
+  $footer-copyright-color: #a4b1c4
+);
