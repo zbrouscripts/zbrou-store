@@ -1,168 +1,31 @@
 <template>
-    <div class="footer">
-        <div class="footer__store container">
-            <div class="footer__copyright">
-                <p>
-                    {{
-                        $t("footer.copyright", {
-                            storeName: appConfig.storeName,
-                        })
-                    }}
-                </p>
-            </div>
-            <div class="footer__links">
-                <PlayButton />
-
-                <Button
-                    v-if="appConfig.discordUrl"
-                    tag="a"
-                    :href="appConfig.discordUrl"
-                    variant="secondary"
-                    prepend-icon="discord"
-                >
-                    {{ $t("footer.join_our_discord") }}
-                </Button>
-            </div>
-        </div>
-
-        <div class="footer__tebex">
-            <div class="footer__tebex-inner container">
-                <div class="footer__tebex-description">
-                    <a
-                        :href="`https://www.tebex.io/?utm_source=store&utm_campaign=${appConfig.storeId}`"
-                    >
-                        <Icon
-                            name="tebex"
-                            width="51px"
-                            :font-controlled="false"
-                        />
-                    </a>
-                    <p>
-                        {{ $t("footer.tebex.description") }}
-                    </p>
-                </div>
-
-                <div class="footer__tebex__links">
-                    <a href="https://checkout.tebex.io/impressum">
-                        {{ $t("footer.tebex.impressum") }}
-                    </a>
-                    <a href="https://checkout.tebex.io/terms">
-                        {{ $t("footer.tebex.tos") }}
-                    </a>
-                    <a href="https://checkout.tebex.io/privacy">
-                        {{ $t("footer.tebex.privacy_policy") }}
-                    </a>
-                </div>
-            </div>
-        </div>
+  <footer class="zb-footer">
+    <div class="zb-footer__main">
+      <div class="zb-footer__brand">
+        <NuxtLink to="/" class="zb-footer__logo">ZB<span>.</span><small>ZBROU SCRIPTS</small></NuxtLink>
+        <p>Independent FiveM resources. Built with purpose, detail and room to make every server feel different.</p>
+      </div>
+      <div class="zb-footer__column"><h3>Explore</h3><a href="/#phrasekill">PhraseKill</a><a href="/#features">Features</a><a href="/#activity">Network</a><a href="/#faq">Questions</a></div>
+      <div class="zb-footer__column"><h3>Resources</h3><a href="https://github.com/zbrouscripts/docs" target="_blank" rel="noopener noreferrer">Documentation</a><a href="https://zbrouscripts.gitbook.io/zbrou-scripts/frasekill" target="_blank" rel="noopener noreferrer">PhraseKill guide</a><a href="https://youtu.be/AYea1bq0pv4" target="_blank" rel="noopener noreferrer">Video demo</a></div>
+      <div class="zb-footer__column"><h3>Legal</h3><a href="https://checkout.tebex.io/terms" target="_blank" rel="noopener noreferrer">Terms of service</a><a href="https://checkout.tebex.io/privacy" target="_blank" rel="noopener noreferrer">Privacy policy</a><a href="https://checkout.tebex.io/impressum" target="_blank" rel="noopener noreferrer">Imprint</a></div>
     </div>
+    <div class="zb-footer__bottom"><span>© 2026 ZBrou Scripts. All rights reserved.</span><span>Purchases and order-related support are handled by <a href="https://www.tebex.io/" target="_blank" rel="noopener noreferrer">Tebex</a> as Merchant of Record.</span></div>
+  </footer>
 </template>
 
-<script setup lang="ts">
-const appConfig = useAppConfig();
-</script>
-
-<style lang="scss" scoped>
-@use "~/assets/styles/settings" as *;
-@use "~/assets/styles/tools";
-
-.footer {
-    width: 100%;
-    background-color: $footer-bg;
-
-    &__store {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        margin: 0 auto;
-        width: 100%;
-        justify-content: space-between;
-        padding: 16px 20px;
-        gap: 15px;
-
-        @include tools.media-breakpoint-up("md") {
-            height: $footer-height;
-            padding: 0 38px;
-        }
-    }
-
-    &__tebex {
-        display: flex;
-        align-items: center;
-        font-family: "Lato";
-        min-height: $footer-tebex-height;
-        background-color: $footer-tebex-bg;
-        color: $footer-tebex-color;
-        font-size: $footer-tebex-font-size;
-
-        &-inner {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: center;
-            height: 100%;
-            gap: 20px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 16px 20px;
-
-            @include tools.media-breakpoint-up("md") {
-                padding: 0 38px;
-            }
-        }
-
-        &-description {
-            svg {
-                min-width: 51px;
-            }
-
-            display: flex;
-            align-items: center;
-            gap: 20px;
-
-            p {
-                @include tools.media-breakpoint-up("md") {
-                    max-width: 450px;
-                }
-
-                @include tools.media-breakpoint-up("lg") {
-                    max-width: initial;
-                }
-            }
-        }
-
-        p {
-            margin-bottom: 0;
-        }
-
-        &__links {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-
-            @include tools.media-breakpoint-up("md") {
-                margin-left: auto;
-                width: auto;
-            }
-            a + a {
-                margin-left: 22px;
-            }
-        }
-    }
-
-    &__copyright {
-        p,
-        small {
-            margin-bottom: 0;
-            color: $footer-copyright-color;
-        }
-    }
-
-    &__links {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-}
+<style scoped>
+.zb-footer{background:#050a12;border-top:1px solid #29456a;color:#8fa1bb;font-family:Manrope,Arial,sans-serif}
+.zb-footer__main{max-width:1310px;margin:auto;display:grid;grid-template-columns:2fr repeat(3,1fr);gap:46px;padding:82px 38px 70px}
+.zb-footer__logo{display:flex;align-items:center;gap:16px;text-decoration:none;color:#f5f8ff;font:900 47px "Space Grotesk",Arial,sans-serif;letter-spacing:-.12em}
+.zb-footer__logo span{color:#367fe6}
+.zb-footer__logo small{font:800 12px Manrope,Arial,sans-serif;letter-spacing:.15em;color:#d1e0f5}
+.zb-footer__brand p{max-width:290px;font-size:13px;line-height:1.8;color:#8497b2;margin:22px 0 0}
+.zb-footer__column{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.zb-footer__column h3{font:800 11px Manrope,sans-serif;letter-spacing:.1em;color:#e3edfc;margin:0 0 8px}
+.zb-footer__column a{color:#899ebc;font-size:12px;text-decoration:none;transition:color .2s}
+.zb-footer__column a:hover{color:#f4f8ff}
+.zb-footer__bottom{border-top:1px solid #20334d;max-width:1310px;margin:auto;display:flex;gap:25px;align-items:center;justify-content:space-between;padding:28px 38px 36px;color:#697c97;font-size:11px}
+.zb-footer__bottom a{color:#abc5ed;text-decoration:underline}
+@media(max-width:800px){.zb-footer__main{grid-template-columns:repeat(2,1fr);gap:40px}.zb-footer__bottom{flex-direction:column;align-items:start}}
+@media(max-width:460px){.zb-footer__main{grid-template-columns:repeat(2,1fr);gap:35px 25px;padding:60px 20px}.zb-footer__brand{grid-column:span 2}.zb-footer__bottom{padding:25px 20px}.zb-footer__logo{font-size:40px}}
 </style>
