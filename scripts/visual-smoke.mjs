@@ -60,4 +60,7 @@ try {
 } finally {
   await browser?.close();
   server.kill("SIGTERM");
+  // npm may leave a Nuxt child process alive; the CI runner must always terminate.
+  await sleep(300);
+  process.exit(process.exitCode ?? 0);
 }
