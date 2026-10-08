@@ -38,7 +38,7 @@ try {
 
   await desktop.locator("#preview").scrollIntoViewIfNeeded();
   await desktop.getByRole("button", { name: "Glitch" }).click();
-  assert.equal(await desktop.locator(".ph-lab__screen--glitch").count(), 1);
+  await desktop.locator(".ph-lab__screen--glitch").waitFor({ state: "attached", timeout: 10000 });
   await desktop.locator(".story-track").scrollIntoViewIfNeeded();
   await sleep(300);
   await desktop.screenshot({ path: "screenshots/scroll-scene-desktop.png", animations: "disabled" });
@@ -50,7 +50,7 @@ try {
   const overflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(overflow <= 2, "Unexpected horizontal overflow on mobile: " + overflow);
   await mobile.locator(".zb-nav__mobile-toggle").click();
-  assert.equal(await mobile.locator(".zb-nav__links--open").count(), 1);
+  await mobile.locator(".zb-nav__links--open").waitFor({ state: "visible", timeout: 10000 });
   console.log("PASS: desktop/mobile render, hero, scroll scene, effect tabs, mobile menu, no horizontal overflow");
   console.log("Non-fatal runtime page errors:", errors.slice(0, 8));
 } catch (error) {
