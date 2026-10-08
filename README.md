@@ -65,3 +65,12 @@ estado remoto y, después, esperar la confirmación del despliegue de Cloudflare
 
 Las fuentes originales conservan su licencia en public/fonts/OFL.txt.
 
+## Rendimiento de las animaciones
+
+El fondo mantiene 30 FPS con un reloj que conserva los intervalos fraccionarios de
+las pantallas de 60–165 Hz. Su velocidad depende del tiempo real, sin reducir las
+partículas, los brillos, las estelas ni los desenfoques. Los reflejos de las tarjetas
+agrupan los movimientos del puntero una vez por fotograma; el flotado lateral usa
+traslación en lugar de recalcular la distribución de la página. `npm run test:motion`
+comprueba cadencia, velocidad, pausas y recuperación tras un bloqueo del navegador.
+

@@ -102,7 +102,8 @@ async function addToBasket(product: StoreProduct) {
 const { enabled: motionEnabled, toggle } = useStoreMotion();
 const hero = ref<HTMLElement | null>(null), progress = ref(0);
 const heroStyle = computed(() => ({ transform: "translateY(" + progress.value * 70 + "px) scale(" + (1 - progress.value * .08) + ")", opacity: 1 - progress.value * .8 }));
-let frame = 0;
+let frame = 0, cardFrame = 0;
+let cardPointer: { node: HTMLElement; x: number; y: number } | null = null;
 function updateScene() {
   frame = 0;
   if (!motionEnabled.value || !hero.value) return;
@@ -111,13 +112,24 @@ function updateScene() {
 function scheduleScene() { if (!frame) frame = requestAnimationFrame(updateScene); }
 function moveCard(event: PointerEvent) {
   if (!motionEnabled.value || event.pointerType === "touch") return;
-  const node = event.currentTarget as HTMLElement, box = node.getBoundingClientRect();
-  node.style.setProperty("--shine-x", (event.clientX - box.left) + "px"); node.style.setProperty("--shine-y", (event.clientY - box.top) + "px");
-  node.style.setProperty("--tilt-x", ((event.clientY - box.top) / box.height - .5) * -4 + "deg");
-  node.style.setProperty("--tilt-y", ((event.clientX - box.left) / box.width - .5) * 5 + "deg");
+  cardPointer = { node: event.currentTarget as HTMLElement, x: event.clientX, y: event.clientY };
+  if (!cardFrame) cardFrame = requestAnimationFrame(updateCard);
 }
-function resetCard(event: PointerEvent) { const node = event.currentTarget as HTMLElement; ["--shine-x", "--shine-y", "--tilt-x", "--tilt-y"].forEach(p => node.style.removeProperty(p)); }
-watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else progress.value = 0; });
+function updateCard() {
+  cardFrame = 0;
+  if (!motionEnabled.value || !cardPointer) return;
+  const { node, x, y } = cardPointer, box = node.getBoundingClientRect();
+  node.style.setProperty("--shine-x", (x - box.left) + "px"); node.style.setProperty("--shine-y", (y - box.top) + "px");
+  node.style.setProperty("--tilt-x", ((y - box.top) / box.height - .5) * -4 + "deg");
+  node.style.setProperty("--tilt-y", ((x - box.left) / box.width - .5) * 5 + "deg");
+}
+function clearCard() {
+  cancelAnimationFrame(cardFrame); cardFrame = 0;
+  if (cardPointer) ["--shine-x", "--shine-y", "--tilt-x", "--tilt-y"].forEach(p => cardPointer!.node.style.removeProperty(p));
+  cardPointer = null;
+}
+function resetCard() { clearCard(); }
+watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else { progress.value = 0; clearCard(); } });
 onMounted(() => { window.addEventListener("scroll", scheduleScene, { passive: true }); window.addEventListener("resize", scheduleScene, { passive: true }); scheduleScene(); });
-onUnmounted(() => { cancelAnimationFrame(frame); window.removeEventListener("scroll", scheduleScene); window.removeEventListener("resize", scheduleScene); });
+onUnmounted(() => { cancelAnimationFrame(frame); clearCard(); window.removeEventListener("scroll", scheduleScene); window.removeEventListener("resize", scheduleScene); });
 </script>

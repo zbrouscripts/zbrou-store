@@ -5,13 +5,15 @@
   </div>
 </template>
 <script setup>
+import { createFramePacer } from '~/utils/framePacer';
 const props = defineProps({ enabled: { type: Boolean, default: false } });
 const canvas = ref(null);
 let stop = () => {};
 onMounted(() => {
   const node = canvas.value, ctx = node.getContext('2d');
   if (!ctx) return;
-  let width = 0, height = 0, stars = [], frame = 0, last = 0, time = 0, ticks = 0;
+  let width = 0, height = 0, stars = [], frame = 0, time = 0, ticks = 0;
+  const pacer = createFramePacer(30);
   let targetX = 0, targetY = 0, offsetX = 0, offsetY = 0;
   function resize() {
     width = document.documentElement.clientWidth; height = innerHeight;
@@ -53,11 +55,11 @@ onMounted(() => {
   }
   function animate(timestamp) {
     frame = requestAnimationFrame(animate);
-    if (last && timestamp - last < 1000 / 30) return;
-    draw(last ? Math.min((timestamp - last) / 1000, .08) : 0); last = timestamp;
+    const dt = pacer.sample(timestamp);
+    if (dt !== null) draw(dt);
   }
   function sync() {
-    cancelAnimationFrame(frame); last = 0;
+    cancelAnimationFrame(frame); pacer.reset();
     if (props.enabled && !document.hidden) frame = requestAnimationFrame(animate);
   }
   function pointer(event) {

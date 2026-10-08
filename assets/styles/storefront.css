@@ -53,7 +53,7 @@ html[data-zb-motion="off"] *,html[data-zb-motion="off"] *::before,html[data-zb-m
 .zb-hero__side small{width:100%;font-size:7px;letter-spacing:.19em;color:#405c7d;padding-left:14px}
 .zb-hero__side--left{left:max(48px,calc((100vw - 1400px)/2));transform:rotate(-90deg);transform-origin:left center}
 .zb-hero__side--right{right:max(48px,calc((100vw - 1400px)/2));justify-content:flex-end;text-align:right;animation-delay:-4s}
-@keyframes zb-side-float{50%{margin-top:-9px}}
+@keyframes zb-side-float{50%{translate:0 -9px}}
 .zb-scroll-cue{position:absolute;bottom:43px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:13px;white-space:nowrap}
 .zb-scroll-cue span{font-size:8px;letter-spacing:.21em;color:#6a83a2}.zb-scroll-cue svg{color:#a3caff;animation:zb-arrow-bob 2.8s ease-in-out infinite}
 @keyframes zb-arrow-bob{50%{transform:translateY(6px)}}
