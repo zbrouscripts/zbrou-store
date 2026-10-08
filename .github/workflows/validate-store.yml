@@ -31,3 +31,16 @@ jobs:
         env:
           NITRO_PRESET: cloudflare_pages
           NUXT_PUBLIC_API_PUBLIC_KEY: ""
+      - name: Install Playwright
+        run: npm install --no-save --package-lock=false playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop and mobile browser smoke tests
+        run: node scripts/visual-smoke.mjs
+      - name: Upload visual screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zbrou-store-visual-preview
+          path: screenshots/
+          if-no-files-found: ignore
