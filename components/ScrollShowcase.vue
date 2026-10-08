@@ -129,7 +129,7 @@ onUnmounted(() => {
 .story-main__impact span{color:#4f99ff}
 .story-main__sub{position:relative;margin-top:10px;color:#91b1dd;font:700 9px monospace;letter-spacing:.22em}
 .story-main__wave{position:absolute;bottom:22px;display:flex;align-items:center;gap:4px;height:20px}
-.story-main__wave i{display:block;width:3px;height:calc(3px + (var(--n) % 4) * 3px);background:#3579c9;border-radius:2px;transform:scaleY(calc(.5 + var(--progress)*1.2))}
+.story-main__wave i{display:block;width:3px;height:calc(3px + var(--n) * .45px);background:#3579c9;border-radius:2px;transform:scaleY(calc(.5 + var(--progress)*1.2))}
 .story-side{position:absolute;z-index:1;padding:22px 24px;width:230px;min-height:142px;border:1px solid #36547c80;border-radius:18px;background:#102039dd;backdrop-filter:blur(20px);box-shadow:0 22px 70px #0006;display:flex;flex-direction:column}
 .story-side span,.story-final span{font:700 9px monospace;color:#88b3ff;letter-spacing:.15em}
 .story-side strong,.story-final strong{margin-top:17px;color:#edf4ff;line-height:1.12;font-size:22px;letter-spacing:-.04em}
