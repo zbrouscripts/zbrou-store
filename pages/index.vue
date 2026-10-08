@@ -164,6 +164,17 @@
             <div><small>ONLINE PLAYERS</small><strong>{{ displayMetric(usage?.playersOnline) }}</strong><span>{{ usage?.connected ? 'Across opted-in servers' : 'Not yet tracked' }}</span></div>
             <div><small>INSTALLATIONS</small><strong>{{ displayMetric(usage?.installations) }}</strong><span>{{ usage?.connected ? 'Reported by telemetry' : 'Not yet tracked' }}</span></div>
           </div>
+          <div class="ph-activity__feed">
+            <div class="ph-activity__feed-title">RECENT SERVER ACTIVITY <span>{{ usage?.recentActivity?.length ? 'VERIFIED EVENTS' : 'NO PUBLIC EVENTS' }}</span></div>
+            <div v-if="usage?.recentActivity?.length" class="ph-activity__feed-list">
+              <div v-for="(event, index) in usage.recentActivity" :key="event.time + index">
+                <span class="ph-activity__feed-dot"></span>
+                <strong>{{ event.type === 'activation' ? 'New PhraseKill activation' : 'Server currently reporting' }}</strong>
+                <time :datetime="event.time">{{ new Date(event.time).toLocaleString('en-GB') }}</time>
+              </div>
+            </div>
+            <p v-else>Verified server activity will appear here once an opt-in telemetry feed is connected. No fictional user names or purchases.</p>
+          </div>
           <div class="ph-activity__note"><span aria-hidden="true">ⓘ</span><p>No invented sales, player or server counts. Real activity will appear once a server-side telemetry source is configured.</p><span v-if="usage?.updatedAt" class="ph-activity__timestamp">UPDATED {{ new Date(usage.updatedAt).toLocaleString('en-GB') }}</span></div>
         </div>
       </div>
@@ -223,7 +234,7 @@ const phrasekillPackage = computed<Package | undefined>(() => {
   const products = (categories.value ?? []).flatMap((category) => category.packages ?? []);
   return products.find((pkg) => pkg.id === 7706999 || /phrase\s*kill/i.test(pkg.name));
 });
-interface Usage { connected: boolean; serversActive: number | null; playersOnline: number | null; installations: number | null; updatedAt: string | null }
+interface Usage { connected: boolean; serversActive: number | null; playersOnline: number | null; installations: number | null; updatedAt: string | null; recentActivity: Array<{ type: "activation" | "heartbeat"; time: string }> }
 const { data: usage } = await useFetch<Usage>("/api/usage");
 const displayMetric = (number: number | null | undefined) => typeof number === "number" ? number.toLocaleString("en-US") : "—";
 const adding = ref(false);
