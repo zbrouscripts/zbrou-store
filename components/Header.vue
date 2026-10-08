@@ -1,253 +1,61 @@
 <template>
-    <div class="header" :style="{ height }">
-        <div :class="classes" ref="header">
-            <nav
-                :class="{
-                    'd-flex': true,
-                    container: isSticky,
-                    'pa-3': !isSticky,
-                    'pa-0': isSticky,
-                }"
-            >
-                <div class="col d-flex align-center ga-4">
-                    <Button
-                        tag="a"
-                        :href="appConfig.mainSiteUrl"
-                        icon="home"
-                        variant="clear"
-                        :aria-label="$t('buttons.home')"
-                    ></Button>
+  <header class="zb-nav">
+    <div class="zb-nav__inner">
+      <NuxtLink to="/" class="zb-nav__brand" aria-label="ZBrou Scripts home" @click="menuOpen = false">
+        <span class="zb-nav__symbol">ZB<span>.</span></span>
+        <span class="zb-nav__brand-copy"><b>ZBROU</b><small>SCRIPTS</small></span>
+      </NuxtLink>
 
-                    <Button
-                        v-if="categories && categories.length > 3"
-                        icon="menu"
-                        @click="uiStore.toggleItem('menu-sidebar')"
-                        variant="clear"
-                        :aria-label="$t('buttons.menu')"
-                    ></Button>
+      <nav class="zb-nav__links" :class="{ 'zb-nav__links--open': menuOpen }" aria-label="Main navigation">
+        <a href="/#home" @click="menuOpen = false">Home</a>
+        <a href="/#phrasekill" @click="menuOpen = false">PhraseKill</a>
+        <a href="/#features" @click="menuOpen = false">Features</a>
+        <a href="/#activity" @click="menuOpen = false">Network</a>
+        <a href="/#faq" @click="menuOpen = false">FAQ</a>
+      </nav>
 
-                    <PlayButton class="d-none d-lg-inline-flex" />
-                </div>
-                <div class="col d-flex align-center">
-                    <NuxtLink to="/" class="header__brand d-none d-md-flex" aria-label="ZBrou Scripts - Home">
-                        <span class="header__brand-name">zbrou<span class="header__brand-dot">.</span></span>
-                        <span class="header__brand-label">SCRIPTS</span>
-                    </NuxtLink>
-
-                    <Button
-                        variant="clear"
-                        class="header__logo-icon d-md-none mx-auto"
-                        @click="scrollToTop"
-                        :aria-label="$t('buttons.go_to_top')"
-                    >
-                        <span class="header__brand-mobile" aria-hidden="true">z<span>.</span></span>
-                    </Button>
-                </div>
-                <div class="col d-flex justify-end align-center ga-4">
-                    <ClientOnly>
-                        <Button
-                            class="d-none d-sm-inline-flex login-btn"
-                            variant="primary"
-                            :to="authStore.loginRoute"
-                            ref="loginButton"
-                        >
-                            <template #prepend>
-                                <Avatar :user="authStore.user" />
-                            </template>
-
-                            <template #default>
-                                <span
-                                    class="text-center"
-                                    ref="username"
-                                    :style="{ minWidth: usernameWidth }"
-                                >
-                                    {{
-                                        authStore.isAuthenticated
-                                            ? isHovered
-                                                ? $t("buttons.logout")
-                                                : authStore.user.username
-                                            : $t("buttons.login")
-                                    }}
-                                </span>
-                            </template>
-                        </Button>
-                    </ClientOnly>
-                    <Button
-                        class="d-none d-sm-inline-flex"
-                        variant="success"
-                        prependIcon="cart"
-                        @click="uiStore.toggleItem('cart-sidebar')"
-                    >
-                        <ClientOnly :fallback="t('buttons.cart')">
-                            {{
-                                t(
-                                    "buttons.cart",
-                                    basketStore.basket?.packages?.length ?? 0,
-                                )
-                            }}
-                        </ClientOnly>
-                    </Button>
-
-                    <!-- Mobile buttons -->
-                    <ClientOnly>
-                        <Button
-                            class="d-inline-flex d-sm-none btn--icon"
-                            variant="primary"
-                            :to="authStore.loginRoute"
-                            :aria-label="
-                                authStore.isAuthenticated
-                                    ? isHovered
-                                        ? $t('buttons.logout')
-                                        : authStore.user.username
-                                    : $t('buttons.login')
-                            "
-                        >
-                            <Avatar :user="authStore.user" />
-                        </Button>
-                    </ClientOnly>
-
-                    <Button
-                        class="d-inline-flex d-sm-none"
-                        variant="success"
-                        icon="cart"
-                        @click="uiStore.toggleItem('cart-sidebar')"
-                        :aria-label="
-                            $t(
-                                'buttons.cart',
-                                basketStore.basket?.packages?.length ?? 0,
-                            )
-                        "
-                    >
-                    </Button>
-                </div>
-            </nav>
-        </div>
+      <div class="zb-nav__actions">
+        <NuxtLink :to="authStore.loginRoute" class="zb-nav__login">{{ authStore.isAuthenticated ? 'Account' : 'Login' }}</NuxtLink>
+        <button class="zb-nav__cart" type="button" @click="uiStore.toggleItem('cart-sidebar')" aria-label="Open shopping basket">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.3 12.2a2 2 0 0 0 2 1.6H19a2 2 0 0 0 2-1.7L22 8H6"/><circle cx="10" cy="21" r="1"/><circle cx="19" cy="21" r="1"/></svg>
+          <span>Cart</span><small>{{ basketStore.basket?.packages?.length ?? 0 }}</small>
+        </button>
+        <button type="button" class="zb-nav__mobile-toggle" :aria-expanded="menuOpen" aria-label="Toggle navigation" @click="menuOpen = !menuOpen"><i></i><i></i><i></i></button>
+      </div>
     </div>
+  </header>
 </template>
 
 <script setup lang="ts">
-const uiStore = useUIStore();
+const menuOpen = ref(false);
 const authStore = useAuthStore();
 const basketStore = useBasketStore();
-const { t } = useI18n();
-
-const loginButton = ref();
-const username = ref();
-const isHovered = useElementHover(loginButton);
-
-const usernameWidth = computed(() => {
-    return `${username.value?.offsetWidth ?? 0}px`;
-});
-
-const appConfig = useAppConfig();
-
-const isSticky = ref(false);
-const { y } = useWindowScroll();
-
-watch(
-    () => y.value,
-    () => {
-        if (y.value > 60) {
-            isSticky.value = true;
-        } else {
-            isSticky.value = false;
-        }
-    },
-);
-
-const height = ref<string | undefined>();
-const header = ref<HTMLDivElement | null>(null);
-
-useResizeObserver(header, (entries) => {
-    const entry = entries[0];
-    height.value = `${entry.contentRect.height}px`;
-});
-
-onMounted(() => {
-    height.value = header.value?.offsetHeight + "px";
-});
-
-const classes = computed(() => {
-    return {
-        header__container: true,
-        "pa-0": true,
-        "header__container--sticky": isSticky.value,
-        container: !isSticky.value,
-        "container-fluid": isSticky.value,
-    };
-});
-
-const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-};
-
-const categoryStore = useCategoryStore();
-const { data: categories } = await useAsyncData("categories", () => {
-    return categoryStore.fetchCategories();
-});
+const uiStore = useUIStore();
 </script>
 
-<style lang="scss" scoped>
-@use "~/assets/styles/settings" as *;
-@use "sass:map";
-
-.header {
-    $self: &;
-    background-color: $header-bg;
-
-    width: 100%;
-
-    img {
-        max-width: 120px;
-        margin: 0 auto;
-    }
-
-    &__container {
-        &--sticky {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: map-get($z-index, "header");
-            background-color: $header-sticky-bg;
-
-            #{$self}__logo {
-                display: none !important;
-
-                &-icon {
-                    display: block !important;
-                }
-            }
-        }
-    }
-    &__brand {
-        gap: 12px;
-        align-items: baseline;
-        justify-content: center;
-        margin-inline: auto;
-        text-decoration: none;
-        &:hover { text-decoration: none; }
-    }
-    &__brand-name {
-        color: #f3f7ff;
-        font-weight: 900;
-        letter-spacing: -0.075em;
-        font-size: 29px;
-        line-height: 1;
-        text-transform: lowercase;
-    }
-    &__brand-dot { color: #438dff; }
-    &__brand-label {
-        color: #7d96b8;
-        font-size: 9px;
-        font-weight: 800;
-        letter-spacing: .22em;
-    }
-    &__brand-mobile {
-        font-size: 23px;
-        color: #f3f7ff;
-        font-weight: 900;
-        span { color: #438dff; }
-    }
-}
+<style scoped>
+.zb-nav{position:sticky;top:0;z-index:700;width:100%;height:84px;background:#080d16eF;border-bottom:1px solid #273a58b5;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);font-family:Manrope,Arial,sans-serif}
+.zb-nav__inner{max-width:1390px;padding:0 37px;margin:auto;height:100%;display:flex;align-items:center;justify-content:space-between;gap:30px}
+.zb-nav__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.zb-nav__brand:hover{text-decoration:none}
+.zb-nav__symbol{color:#fff;font:900 24px "Space Grotesk",Arial,sans-serif;letter-spacing:-.12em;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;border:1px solid #31528c;background:linear-gradient(145deg,#213f73,#0a1730);box-shadow:inset 0 1px #ffffff32}
+.zb-nav__symbol span{color:#4691ff}
+.zb-nav__brand-copy{display:flex;flex-direction:column;gap:0}
+.zb-nav__brand-copy b{font-weight:900;font-size:14px;letter-spacing:.17em;line-height:1.2;color:#f1f7ff}
+.zb-nav__brand-copy small{font-size:9px;font-weight:800;letter-spacing:.35em;color:#6486b5;line-height:1.7}
+.zb-nav__links{display:flex;align-items:center;gap:clamp(14px,2.2vw,34px)}
+.zb-nav__links a{font-size:12px;font-weight:700;color:#8499b6;text-decoration:none;transition:color .2s}
+.zb-nav__links a:hover{color:#fff;text-decoration:none}
+.zb-nav__actions{display:flex;align-items:center;gap:22px}
+.zb-nav__login{color:#b6c8e5;font-size:12px;font-weight:800;text-decoration:none}
+.zb-nav__login:hover{color:#fff;text-decoration:none}
+.zb-nav__cart{border:1px solid #3e82ea;background:#0e58d8;color:#fff;border-radius:10px;display:flex;gap:10px;align-items:center;padding:12px 15px;font-size:12px;font-weight:800;transition:background .2s,transform .2s}
+.zb-nav__cart:hover{background:#2572e4;transform:translateY(-2px)}
+.zb-nav__cart small{min-width:21px;height:20px;padding:2px 4px;background:#ffffff29;border-radius:5px;font-size:10px}
+.zb-nav__mobile-toggle{display:none;width:42px;height:42px;align-items:center;justify-content:center;flex-direction:column;gap:5px;border:1px solid #365076;border-radius:9px;background:#15243b;color:#fff}
+.zb-nav__mobile-toggle i{display:block;width:19px;height:2px;background:#c9dcf9;border-radius:2px}
+@media(max-width:980px){.zb-nav__links{gap:14px}.zb-nav__inner{gap:17px;padding:0 22px}.zb-nav__actions{gap:14px}}
+@media(max-width:790px){.zb-nav{height:72px}.zb-nav__inner{padding:0 16px}.zb-nav__links{display:none;position:absolute;top:71px;left:0;right:0;flex-direction:column;align-items:stretch;padding:16px 22px 25px;gap:0;background:#0a1424f9;border-bottom:1px solid #314667;box-shadow:0 20px 50px #0007}.zb-nav__links--open{display:flex}.zb-nav__links a{padding:12px 0;font-size:14px}.zb-nav__mobile-toggle{display:flex}.zb-nav__login{display:none}}
+@media(max-width:450px){.zb-nav__brand-copy b{font-size:12px}.zb-nav__brand-copy small{font-size:8px}.zb-nav__cart{padding:10px 12px}.zb-nav__cart span{display:none}}
+@media(prefers-reduced-motion:reduce){.zb-nav__cart,.zb-nav__links a{transition:none}}
 </style>
