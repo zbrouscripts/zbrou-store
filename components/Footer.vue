@@ -1,12 +1,15 @@
 <template>
   <footer class="store-footer">
     <div class="store-footer__top">
-      <NuxtLink to="/" class="store-footer__brand" aria-label="ZBrou Scripts"><img src="/zbrou-original-logo.svg" width="28" height="28" alt="" /><span>ZBROU SCRIPTS</span></NuxtLink>
+      <NuxtLink to="/" class="store-footer__brand" aria-label="ZBrou Scripts"><img :src="zbrouBrandImage" width="28" height="28" alt="" /><span>ZBROU SCRIPTS</span></NuxtLink>
       <div class="store-footer__links"><a href="/#scripts">Scripts</a><a href="https://zbrouscripts.gitbook.io/zbrou-scripts" target="_blank" rel="noopener noreferrer">Documentación</a><a href="https://checkout.tebex.io/terms" target="_blank" rel="noopener noreferrer">Condiciones</a><a href="https://checkout.tebex.io/privacy" target="_blank" rel="noopener noreferrer">Privacidad</a></div>
     </div>
     <div class="store-footer__bottom"><span>© 2026 ZBrou Scripts.</span><span>Pagos y pedidos gestionados por <a href="https://www.tebex.io/" target="_blank" rel="noopener noreferrer">Tebex</a> como vendedor oficial.</span></div>
   </footer>
 </template>
+<script setup lang="ts">
+import { zbrouBrandImage } from "~/utils/brandImages";
+</script>
 <style scoped>
 .store-footer{background:#080a0e;color:#8796a9;border-top:1px solid #ffffff1e;font-family:Manrope,Arial,sans-serif}
 .store-footer__top,.store-footer__bottom{max-width:1200px;margin:auto;padding-inline:20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
