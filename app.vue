@@ -1,6 +1,6 @@
 <template>
     <Head>
-        <link rel="icon" type="image/x-icon" href="/favicon.png" />
+        <link rel="icon" type="image/svg+xml" href="/zbrou-icon.svg" />
     </Head>
 
     <NuxtLayout>
