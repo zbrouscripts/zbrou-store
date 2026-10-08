@@ -29,12 +29,10 @@
                     <PlayButton class="d-none d-lg-inline-flex" />
                 </div>
                 <div class="col d-flex align-center">
-                    <NuxtImg
-                        preload
-                        class="header__logo d-none d-md-block"
-                        src="/logo.svg"
-                        :alt="$t('store_name')"
-                    />
+                    <NuxtLink to="/" class="header__brand d-none d-md-flex" aria-label="ZBrou Scripts - Home">
+                        <span class="header__brand-name">zbrou<span class="header__brand-dot">.</span></span>
+                        <span class="header__brand-label">SCRIPTS</span>
+                    </NuxtLink>
 
                     <Button
                         variant="clear"
@@ -42,11 +40,7 @@
                         @click="scrollToTop"
                         :aria-label="$t('buttons.go_to_top')"
                     >
-                        <NuxtImg
-                            src="/logo-icon.svg"
-                            :alt="$t('store_name')"
-                            width="16"
-                        />
+                        <span class="header__brand-mobile" aria-hidden="true">z<span>.</span></span>
                     </Button>
                 </div>
                 <div class="col d-flex justify-end align-center ga-4">
@@ -225,6 +219,35 @@ const { data: categories } = await useAsyncData("categories", () => {
                 }
             }
         }
+    }
+    &__brand {
+        gap: 12px;
+        align-items: baseline;
+        justify-content: center;
+        margin-inline: auto;
+        text-decoration: none;
+        &:hover { text-decoration: none; }
+    }
+    &__brand-name {
+        color: #f3f7ff;
+        font-weight: 900;
+        letter-spacing: -0.075em;
+        font-size: 29px;
+        line-height: 1;
+        text-transform: lowercase;
+    }
+    &__brand-dot { color: #438dff; }
+    &__brand-label {
+        color: #7d96b8;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .22em;
+    }
+    &__brand-mobile {
+        font-size: 23px;
+        color: #f3f7ff;
+        font-weight: 900;
+        span { color: #438dff; }
     }
 }
 </style>
