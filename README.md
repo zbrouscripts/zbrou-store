@@ -1,70 +1,33 @@
-# ZBrou Scripts Store
+# ZBrou Store
 
-Official independent storefront for ZBrou PhraseKill, built on Nuxt 3, Vue and the Tebex Headless API, deployed to Cloudflare Pages.
+Tienda independiente de **ZBrou Scripts** para FiveM. Nuxt 3 + Cloudflare Pages + Tebex Headless.
 
-## Included
+## Diseño actual
 
-- Dark-blue ZBrou branding and responsive product-first storefront.
-- Scroll-controlled 3D PhraseKill section and interactive visual concept demo.
-- A live price and purchase button ONLY if a PhraseKill package is published through Tebex.
-- Video preview, documentation, FAQs and accessibility/reduced-motion alternatives.
-- Aggregate live telemetry scaffold with safe disconnected state (never fake customers, server counts or sales).
+- Portada compacta en español, inspirada en la maqueta `zbrou-preview-para-otro-chat.zip`.
+- Logotipo original ZBrou y portada original del producto PhraseKill.
+- Inicio, catálogo de scripts y un bloque discreto de servidores.
+- Una tarjeta de PhraseKill en el catálogo, con ficha propia en `/script/phrasekill`.
+- Carrito y autentificación de Tebex conservados desde la plantilla.
+- Los precios proceden exclusivamente del catálogo de Tebex. Si el producto no está publicado, no se puede comprar.
+- Animación ligera del inicio asociada al desplazamiento, con soporte de movimiento reducido.
 
-## Cloudflare configuration
+## Publicación
 
-Production branch: main
-Build command: npm run build
-Build directory: dist
-Framework: Nuxt.js
+Cloudflare Pages: proyecto `zbrou-store`; rama pública `main`; rama de pruebas `design/phrasekill-showcase`.
 
-Environment variables:
-- NITRO_PRESET = cloudflare_pages
-- NUXT_PUBLIC_API_PUBLIC_KEY = Tebex public token
+Variables de compilación:
+- `NITRO_PRESET=cloudflare_pages`
+- `NUXT_PUBLIC_API_PUBLIC_KEY=` token público de Tebex
 
-The demo-store fallback public token is removed from source.
+La clave privada de Tebex se guarda **solo como Secret** en Cloudflare si es necesaria (`NUXT_API_PRIVATE_KEY`). Nunca publicarla ni compartirla en GitHub.
 
-Do not put any private key in the repository or a chat. To support operations requiring a private Tebex API key, regenerate the previously exposed key first, and enter the fresh one in Cloudflare Pages -> Settings -> Variables and Secrets as:
-- Name: NUXT_API_PRIVATE_KEY
-- Type: Secret
-Never use a NUXT_PUBLIC_ name for this secret.
+## Estadísticas
 
-## PhraseKill
+`/api/usage` no devuelve cifras inventadas. Hasta configurar un proveedor agregado real, muestra valores no disponibles. Para conectarlo sin datos personales ni nombres de servidores, utilizar `NUXT_ZBROU_USAGE_ENDPOINT` y el secreto opcional `NUXT_ZBROU_USAGE_TOKEN`.
 
-The storefront checks the actual published Tebex product list for PhraseKill (known product ID 7706999, with a name fallback). When absent, it labels the item as unpublished and disables purchases; it does not invent a commercial price. The live checkout must be verified before release.
+## Comprobaciones
 
-## Real server usage metrics
+`npm ci`, `npm run build`. GitHub Actions comprueba compilación y, si el entorno permite levantar Nuxt, ejecuta `scripts/visual-smoke.mjs` en Chrome para comprobar portada, catálogo, ficha, menú móvil y desbordamientos.
 
-The public /api/usage route displays ONLY verified aggregate statistics from a trusted HTTPS source.
-
-By default the page shows no values, because no live server instrumentation has been connected.
-
-Optional secrets for the backend:
-- NUXT_ZBROU_USAGE_ENDPOINT = secure HTTPS URL for opt-in aggregate usage.
-- NUXT_ZBROU_USAGE_TOKEN = optional bearer token, stored as a Secret.
-
-Example upstream schema (illustrative data, NOT actual ZBrou totals):
-
-    {
-      "serversActive": 12,
-      "playersOnline": 220,
-      "installations": 58,
-      "updatedAt": "2026-10-08T18:00:00Z",
-      "recentActivity": [
-        { "type": "activation", "time": "2026-10-08T17:57:00Z" }
-      ]
-    }
-
-The backend only publishes anonymized aggregate counts and two allowed event types (activation, heartbeat). No buyer names or IP addresses. An opt-in FiveM heartbeat aggregation backend must be built before this can go live.
-
-## Development
-
-    npm ci
-    npm run dev
-    npm run build
-
-The design branch is design/phrasekill-showcase. Automated builds run through GitHub Actions on the draft PR. Merge only after checking the Nuxt build, Cloudflare preview, desktop/mobile layout and live Tebex purchase behavior.
-
-Useful links:
-- https://docs.tebex.io/developers/headless-api/overview
-- https://github.com/zbrouscripts/docs
-- https://github.com/tebexio/Headless-Template
+**No fusionar la rama hasta validar la vista previa de Cloudflare y las operaciones reales de compra con Tebex.**
