@@ -89,7 +89,6 @@ const categoryStore = useCategoryStore();
 const { data: categories, error: categoriesError } = await useAsyncData(
   "categories",
   () => categoryStore.fetchCategories(),
-  { default: () => [] },
 );
 const publishedCategories = computed(() => (categories.value ?? []).filter(
   (category) => Array.isArray(category.packages) && category.packages.length > 0,
