@@ -1,143 +1,70 @@
-# Tebex - Headless Store Template
+# ZBrou Scripts Store
 
-An integration of the Tebex Headless API built upon Nuxt, Vue 3 & Typescript for kickstarting your next store design.
+Official independent storefront for ZBrou PhraseKill, built on Nuxt 3, Vue and the Tebex Headless API, deployed to Cloudflare Pages.
 
-## Demo
+## Included
 
-You can view a live demo of this repo by visiting https://tebex-headless-template.pages.dev.
+- Dark-blue ZBrou branding and responsive product-first storefront.
+- Scroll-controlled 3D PhraseKill section and interactive visual concept demo.
+- A live price and purchase button ONLY if a PhraseKill package is published through Tebex.
+- Video preview, documentation, FAQs and accessibility/reduced-motion alternatives.
+- Aggregate live telemetry scaffold with safe disconnected state (never fake customers, server counts or sales).
 
-## ⚡ Setup
-Make sure to install the dependencies:
+## Cloudflare configuration
 
-```bash
-# npm
-npm install
+Production branch: main
+Build command: npm run build
+Build directory: dist
+Framework: Nuxt.js
 
-# pnpm
-pnpm install
+Environment variables:
+- NITRO_PRESET = cloudflare_pages
+- NUXT_PUBLIC_API_PUBLIC_KEY = Tebex public token
 
-# yarn
-yarn install
+The demo-store fallback public token is removed from source.
 
-# bun
-bun install
-```
+Do not put any private key in the repository or a chat. To support operations requiring a private Tebex API key, regenerate the previously exposed key first, and enter the fresh one in Cloudflare Pages -> Settings -> Variables and Secrets as:
+- Name: NUXT_API_PRIVATE_KEY
+- Type: Secret
+Never use a NUXT_PUBLIC_ name for this secret.
 
-Create a .env file
+## PhraseKill
 
-```bash
-cp .env.example .env # Fill out all the necessary fields
-```
+The storefront checks the actual published Tebex product list for PhraseKill (known product ID 7706999, with a name fallback). When absent, it labels the item as unpublished and disables purchases; it does not invent a commercial price. The live checkout must be verified before release.
 
-## 🔑 Getting your API key
-Head to the [API keys](https://creator.tebex.io/developers/api-keys) page within your creator panel. You'll find a private key and a public token.
+## Real server usage metrics
 
-Inside your **.env** file, do the following:
-1. Set the `NUXT_PUBLIC_API_PUBLIC_KEY` key to your public token.
-2. Set the `NUXT_API_PRIVATE_KEY` key to your private key.
+The public /api/usage route displays ONLY verified aggregate statistics from a trusted HTTPS source.
 
-## ⚙️ Configuring
-Update config in `app.config.ts` with your custom configuration options for your webstore.
+By default the page shows no values, because no live server instrumentation has been connected.
 
-## 🎨 Changing the colour scheme 
-There is a default theme for the webstore which is configurable.
+Optional secrets for the backend:
+- NUXT_ZBROU_USAGE_ENDPOINT = secure HTTPS URL for opt-in aggregate usage.
+- NUXT_ZBROU_USAGE_TOKEN = optional bearer token, stored as a Secret.
 
-Within the `assets/styles/theme.scss` file you can specify variable overrides.
+Example upstream schema (illustrative data, NOT actual ZBrou totals):
 
-```scss
-// More information can be found here https://sass-lang.com/documentation/at-rules/use/#configuration
-@forward "./settings" with (
-  // Base settings
-  $pure-black: #000000,
-  $pure-white: #ffffff,
+    {
+      "serversActive": 12,
+      "playersOnline": 220,
+      "installations": 58,
+      "updatedAt": "2026-10-08T18:00:00Z",
+      "recentActivity": [
+        { "type": "activation", "time": "2026-10-08T17:57:00Z" }
+      ]
+    }
 
-  // Background
-  $background-100: #ffffff,
-  $background-200: #f2f2f2,
+The backend only publishes anonymized aggregate counts and two allowed event types (activation, heartbeat). No buyer names or IP addresses. An opt-in FiveM heartbeat aggregation backend must be built before this can go live.
 
-  // Colour pallette
-  $c-100: #e5e5e5,
-  $c-200: #d1cfc6,
-  $c-300: #cccccc,
-  $c-400: #b2b2b2,
-  $c-500: #7f7f7f,
-  $c-600: #666666,
-  $c-700: #4d4d4d,
-  $c-800: #333333,
-  $c-900: #1a1a1a,
+## Development
 
-  $text-high-emphasis-color: #000000,
-  $text-base-color: #000000,
-  $modal-close-color: #000000
-);
-```
+    npm ci
+    npm run dev
+    npm run build
 
-## 🚀 Deploying 
-Once you're ready to deploy your new store we recommend using a serverless platform such as [Cloudflare Pages](https://pages.cloudflare.com/). They have documentation for [deploying a Nuxt site](https://developers.cloudflare.com/pages/framework-guides/deploy-a-nuxt-site/) which only takes a few minutes to get setup.
+The design branch is design/phrasekill-showcase. Automated builds run through GitHub Actions on the draft PR. Merge only after checking the Nuxt build, Cloudflare preview, desktop/mobile layout and live Tebex purchase behavior.
 
-As stated in the nuxt documentation the .env file will not be read by the server when deployed. You will need to specifiy these for the server at runtime.
-
-- https://developers.cloudflare.com/pages/configuration/build-configuration/#environment-variables
-- https://nuxt.com/docs/guide/directory-structure/env#production-preview
-
-## 👩‍💻 Development
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Building for Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-#### Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-## 🔗 Useful Links
-
-- [Headless API Documentation](https://docs.tebex.io/developers/headless-api/overview)
-- [Tebex.js Documentation](https://docs.tebex.io/developers/tebex.js)
-- [Nuxt](https://nuxt.com/docs)
-- [Vue 3](https://vuejs.org/guide/introduction.html)
-
-## 🙋‍♂️ Support
-For issues relating to this template (https://github.com/tebexio/Headless-Template) please contact [support@tebex.io.](mailto:support@tebex.io)
+Useful links:
+- https://docs.tebex.io/developers/headless-api/overview
+- https://github.com/zbrouscripts/docs
+- https://github.com/tebexio/Headless-Template
