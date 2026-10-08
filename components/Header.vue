@@ -1,61 +1,56 @@
 <template>
-  <header class="zb-nav">
-    <div class="zb-nav__inner">
-      <NuxtLink to="/" class="zb-nav__brand" aria-label="ZBrou Scripts home" @click="menuOpen = false">
-        <span class="zb-nav__symbol">ZB<span>.</span></span>
-        <span class="zb-nav__brand-copy"><b>ZBROU</b><small>SCRIPTS</small></span>
+  <header class="store-header">
+    <div class="store-header__inner">
+      <NuxtLink class="store-header__brand" to="/" aria-label="ZBrou Scripts — Inicio" @click="menuOpen = false">
+        <img src="/zbrou-original-logo.svg" width="42" height="42" alt="" />
+        <span>ZBROU<small>SCRIPTS</small></span>
       </NuxtLink>
-
-      <nav class="zb-nav__links" :class="{ 'zb-nav__links--open': menuOpen }" aria-label="Main navigation">
-        <a href="/#home" @click="menuOpen = false">Home</a>
-        <a href="/#phrasekill" @click="menuOpen = false">PhraseKill</a>
-        <a href="/#features" @click="menuOpen = false">Features</a>
-        <a href="/#activity" @click="menuOpen = false">Network</a>
-        <a href="/#faq" @click="menuOpen = false">FAQ</a>
+      <nav class="store-header__nav" :class="{ 'store-header__nav--open': menuOpen }" aria-label="Navegación principal">
+        <a href="/#inicio" @click="menuOpen = false">Inicio</a>
+        <a href="/#scripts" @click="menuOpen = false">Scripts</a>
+        <a href="https://zbrouscripts.gitbook.io/zbrou-scripts" target="_blank" rel="noopener noreferrer" @click="menuOpen = false">Documentación <span aria-hidden="true">↗</span></a>
       </nav>
-
-      <div class="zb-nav__actions">
-        <NuxtLink :to="authStore.loginRoute" class="zb-nav__login">{{ authStore.isAuthenticated ? 'Account' : 'Login' }}</NuxtLink>
-        <button class="zb-nav__cart" type="button" @click="uiStore.toggleItem('cart-sidebar')" aria-label="Open shopping basket">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.3 12.2a2 2 0 0 0 2 1.6H19a2 2 0 0 0 2-1.7L22 8H6"/><circle cx="10" cy="21" r="1"/><circle cx="19" cy="21" r="1"/></svg>
-          <span>Cart</span><small>{{ basketStore.basket?.packages?.length ?? 0 }}</small>
+      <div class="store-header__actions">
+        <NuxtLink class="store-header__account" :to="authStore.loginRoute">{{ authStore.isAuthenticated ? 'Mi cuenta' : 'Acceder' }}</NuxtLink>
+        <button type="button" class="store-header__cart" @click="uiStore.toggleItem('cart-sidebar')" aria-label="Abrir cesta">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.6 13.3a2 2 0 0 0 2 1.7H20l2-11H6"/></svg>
+          <span>Cesta</span>
+          <small v-if="basketStore.basket?.packages?.length">{{ basketStore.basket.packages.length }}</small>
         </button>
-        <button type="button" class="zb-nav__mobile-toggle" :aria-expanded="menuOpen" aria-label="Toggle navigation" @click="menuOpen = !menuOpen"><i></i><i></i><i></i></button>
+        <button class="store-header__menu" type="button" :aria-expanded="menuOpen" aria-label="Abrir menú" @click="menuOpen = !menuOpen"><i></i><i></i><i></i></button>
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-const menuOpen = ref(false);
 const authStore = useAuthStore();
 const basketStore = useBasketStore();
 const uiStore = useUIStore();
+const menuOpen = ref(false);
 </script>
 
 <style scoped>
-.zb-nav{position:sticky;top:0;z-index:700;width:100%;height:84px;background:#080d16eF;border-bottom:1px solid #273a58b5;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);font-family:Manrope,Arial,sans-serif}
-.zb-nav__inner{max-width:1390px;padding:0 37px;margin:auto;height:100%;display:flex;align-items:center;justify-content:space-between;gap:30px}
-.zb-nav__brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-.zb-nav__brand:hover{text-decoration:none}
-.zb-nav__symbol{color:#fff;font:900 24px "Space Grotesk",Arial,sans-serif;letter-spacing:-.12em;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;border:1px solid #31528c;background:linear-gradient(145deg,#213f73,#0a1730);box-shadow:inset 0 1px #ffffff32}
-.zb-nav__symbol span{color:#4691ff}
-.zb-nav__brand-copy{display:flex;flex-direction:column;gap:0}
-.zb-nav__brand-copy b{font-weight:900;font-size:14px;letter-spacing:.17em;line-height:1.2;color:#f1f7ff}
-.zb-nav__brand-copy small{font-size:9px;font-weight:800;letter-spacing:.35em;color:#6486b5;line-height:1.7}
-.zb-nav__links{display:flex;align-items:center;gap:clamp(14px,2.2vw,34px)}
-.zb-nav__links a{font-size:12px;font-weight:700;color:#8499b6;text-decoration:none;transition:color .2s}
-.zb-nav__links a:hover{color:#fff;text-decoration:none}
-.zb-nav__actions{display:flex;align-items:center;gap:22px}
-.zb-nav__login{color:#b6c8e5;font-size:12px;font-weight:800;text-decoration:none}
-.zb-nav__login:hover{color:#fff;text-decoration:none}
-.zb-nav__cart{border:1px solid #3e82ea;background:#0e58d8;color:#fff;border-radius:10px;display:flex;gap:10px;align-items:center;padding:12px 15px;font-size:12px;font-weight:800;transition:background .2s,transform .2s}
-.zb-nav__cart:hover{background:#2572e4;transform:translateY(-2px)}
-.zb-nav__cart small{min-width:21px;height:20px;padding:2px 4px;background:#ffffff29;border-radius:5px;font-size:10px}
-.zb-nav__mobile-toggle{display:none;width:42px;height:42px;align-items:center;justify-content:center;flex-direction:column;gap:5px;border:1px solid #365076;border-radius:9px;background:#15243b;color:#fff}
-.zb-nav__mobile-toggle i{display:block;width:19px;height:2px;background:#c9dcf9;border-radius:2px}
-@media(max-width:980px){.zb-nav__links{gap:14px}.zb-nav__inner{gap:17px;padding:0 22px}.zb-nav__actions{gap:14px}}
-@media(max-width:790px){.zb-nav{height:72px}.zb-nav__inner{padding:0 16px}.zb-nav__links{display:none;position:absolute;top:71px;left:0;right:0;flex-direction:column;align-items:stretch;padding:16px 22px 25px;gap:0;background:#0a1424f9;border-bottom:1px solid #314667;box-shadow:0 20px 50px #0007}.zb-nav__links--open{display:flex}.zb-nav__links a{padding:12px 0;font-size:14px}.zb-nav__mobile-toggle{display:flex}.zb-nav__login{display:none}}
-@media(max-width:450px){.zb-nav__brand-copy b{font-size:12px}.zb-nav__brand-copy small{font-size:8px}.zb-nav__cart{padding:10px 12px}.zb-nav__cart span{display:none}}
-@media(prefers-reduced-motion:reduce){.zb-nav__cart,.zb-nav__links a{transition:none}}
+.store-header{position:sticky;top:0;z-index:700;padding:14px 20px 0;background:transparent;font-family:Manrope,Arial,sans-serif}
+.store-header__inner{display:flex;align-items:center;gap:38px;min-height:70px;width:min(1200px,100%);padding:10px 18px;margin:auto;border:1px solid #ffffff29;border-radius:23px;background:linear-gradient(145deg,#22252bfa,#111317fa 55%,#252930f8);box-shadow:0 18px 42px #0005;backdrop-filter:blur(25px)}
+.store-header__brand{display:flex;gap:8px;align-items:center;text-decoration:none;min-width:172px}
+.store-header__brand:hover{text-decoration:none}
+.store-header__brand img{width:40px;height:40px;object-fit:contain}
+.store-header__brand>span{font:700 17px Oxanium,Arial,sans-serif;letter-spacing:.14em;color:#fff;line-height:1}
+.store-header__brand small{display:block;margin-top:5px;font:600 8px Manrope,sans-serif;letter-spacing:.38em;color:#d9e1ec}
+.store-header__nav{display:flex;align-items:center;gap:28px}
+.store-header__nav a{color:#c3c7cf;text-decoration:none;font-size:13px;font-weight:600;transition:color .2s}
+.store-header__nav a:hover{color:#fff;text-decoration:none}
+.store-header__nav span{color:#a9bedb}
+.store-header__actions{display:flex;align-items:center;gap:20px;margin-left:auto}
+.store-header__account{color:#e4e8ef;font-size:13px;font-weight:600;text-decoration:none}
+.store-header__account:hover{color:#fff;text-decoration:none}
+.store-header__cart{display:flex;align-items:center;gap:9px;justify-content:center;min-height:43px;padding:0 17px;border:0;border-radius:12px;background:#c4d5e9;color:#11233b;font-size:13px;font-weight:800;transition:background .2s,transform .2s}
+.store-header__cart:hover{background:#e0ebf8;transform:translateY(-2px)}
+.store-header__cart small{background:#11233b;color:#fff;border-radius:6px;padding:1px 6px}
+.store-header__menu{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:41px;height:41px;border:1px solid #ffffff30;background:#2b313a;border-radius:10px}
+.store-header__menu i{width:17px;height:2px;border-radius:5px;background:#fff}
+@media(max-width:750px){.store-header__inner{gap:13px}.store-header__nav{display:none;position:absolute;top:77px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:12px 22px;border:1px solid #ffffff26;border-radius:17px;background:#1a1d23;box-shadow:0 19px 35px #0008}.store-header__nav--open{display:flex}.store-header__nav a{padding:12px 0}.store-header__menu{display:flex}.store-header__account{display:none}}
+@media(max-width:440px){.store-header{padding:9px 11px 0}.store-header__inner{padding:9px 12px;min-height:62px;border-radius:17px}.store-header__brand{min-width:auto}.store-header__brand img{width:34px;height:34px}.store-header__brand>span{font-size:14px}.store-header__brand small{font-size:7px}.store-header__cart{min-height:39px;padding:0 12px}.store-header__cart span{display:none}.store-header__actions{gap:9px}}
+@media(prefers-reduced-motion:reduce){.store-header__cart,.store-header__nav a{transition:none}}
 </style>
