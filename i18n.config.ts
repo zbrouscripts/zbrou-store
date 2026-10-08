@@ -10,6 +10,15 @@ export default defineI18nConfig(() => ({
                 notation: "standard",
             },
         },
+        "de-DE": {
+            currency: {
+                style: "currency",
+                currency: "EUR",
+                notation: "standard",
+            },
+        },
+    },
+    messages: {
         "es-ES": {
             store_name: "ZBrou Scripts",
             play: "ZBrou",
@@ -88,7 +97,7 @@ export default defineI18nConfig(() => ({
                 },
             },
             cart: {
-                title: "Cart",
+                title: "Cesta",
                 empty: "Tu cesta está vacía",
                 total: "Total",
                 item: {
@@ -100,15 +109,6 @@ export default defineI18nConfig(() => ({
                 image_alt: "Imagen de la categoría {name}",
             },
         },
-        "de-DE": {
-            currency: {
-                style: "currency",
-                currency: "EUR",
-                notation: "standard",
-            },
-        },
-    },
-    messages: {
         "en-US": {
             store_name: "ZBrou Scripts",
             play: "ZBrou",
