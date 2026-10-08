@@ -1,5 +1,5 @@
 // Public-facing aggregate usage metrics. Without a trusted data source, never fabricate counts.
-// Configure ZBROU_USAGE_ENDPOINT (https only) and optionally ZBROU_USAGE_TOKEN as Cloudflare secrets.
+// Configure NUXT_ZBROU_USAGE_ENDPOINT (https only) and optionally NUXT_ZBROU_USAGE_TOKEN as Cloudflare secrets.
 // Expected upstream JSON:
 // { "serversActive": 12, "playersOnline": 220, "installations": 58, "updatedAt": "2026-10-08T..." }
 // No usernames, IP addresses, server identifiers or customer details are requested.
@@ -10,6 +10,7 @@ interface UsageData {
   playersOnline: Metric;
   installations: Metric;
   updatedAt: string | null;
+  recentActivity: Array<{ type: "activation" | "heartbeat"; time: string }>;
 }
 const offline: UsageData = {
   connected: false,
@@ -17,6 +18,7 @@ const offline: UsageData = {
   playersOnline: null,
   installations: null,
   updatedAt: null,
+  recentActivity: [],
 };
 const normalize = (value: unknown): Metric =>
   typeof value === "number" && Number.isSafeInteger(value) && value >= 0 && value <= 1_000_000_000
@@ -46,7 +48,16 @@ export default defineEventHandler(async (event): Promise<UsageData> => {
     const timestamp = typeof result.updatedAt === "string" && !Number.isNaN(Date.parse(result.updatedAt))
       ? new Date(result.updatedAt).toISOString()
       : null;
-    return { connected: true, serversActive, playersOnline, installations, updatedAt: timestamp };
+    const recentActivity = Array.isArray(result.recentActivity)
+      ? result.recentActivity.slice(0, 5).flatMap((entry: unknown) => {
+          if (!entry || typeof entry !== "object") return [];
+          const item = entry as Record<string, unknown>;
+          if (item.type !== "activation" && item.type !== "heartbeat") return [];
+          if (typeof item.time !== "string" || Number.isNaN(Date.parse(item.time))) return [];
+          return [{ type: item.type, time: new Date(item.time).toISOString() }];
+        })
+      : [];
+    return { connected: true, serversActive, playersOnline, installations, updatedAt: timestamp, recentActivity };
   } catch {
     return offline;
   }
