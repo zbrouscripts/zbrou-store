@@ -1,203 +1,63 @@
 <template>
-  <main class="ph-page">
-    <div class="ph-ambient ph-ambient--top" aria-hidden="true"></div>
-
-    <section id="home" class="ph-hero">
-      <div class="ph-wrap ph-hero__wrap">
-        <div class="ph-hero__intro">
-          <p class="ph-eyebrow"><span class="ph-indicator"></span> ZBROU SCRIPTS <span class="ph-separator">//</span> FIVEM RESOURCES</p>
-          <h1>Make your mark<span class="ph-accent">.</span><br /><span class="ph-hero__outline">Every single kill.</span></h1>
-          <p class="ph-hero__lead">Introducing PhraseKill. Your message, your style, your moment. Give every elimination a visual identity that belongs to your server.</p>
-          <div class="ph-actions">
-            <a class="ph-cta ph-cta--solid" href="#phrasekill">Explore PhraseKill <span aria-hidden="true">↗</span></a>
-            <a class="ph-cta ph-cta--ghost" href="#preview">See it in action <span aria-hidden="true">▷</span></a>
-          </div>
-          <div class="ph-hero__chips"><span>FiveM</span><span>ESX / QBCore / Qbox</span><span>Standalone</span></div>
+  <main class="store-home">
+    <section id="inicio" ref="hero" class="store-hero" :style="{ '--shift': String(scrollProgress) }">
+      <div class="store-hero__ambience" aria-hidden="true"></div>
+      <div class="store-hero__content">
+        <div class="store-hero__identity">
+          <img class="store-hero__mark" src="/zbrou-original-logo.svg" width="110" height="110" alt="Logotipo de ZBrou" />
+          <span>TIENDA OFICIAL · FIVEM</span>
         </div>
-
-        <div class="ph-hero__visual" aria-label="PhraseKill product visual">
-          <div class="ph-hero__halo"></div>
-          <div class="ph-hero__halo ph-hero__halo--inner"></div>
-          <div class="ph-preview-tile">
-            <div class="ph-preview-tile__top"><span><i></i> ZBROU INTERFACE SYSTEM</span><span>PK—01</span></div>
-            <img src="/phrasekill-poster.svg" alt="PhraseKill cover artwork" class="ph-preview-tile__art" />
-            <div class="ph-preview-tile__bottom"><span>PHRASEKILL</span><span>FOR FIVEM ↗</span></div>
-          </div>
-          <div class="ph-hero__float ph-hero__float--left"><span class="ph-float-icon">✧</span><span><b>CUSTOM ANIMATIONS</b><small>Motion & effects</small></span></div>
-          <div class="ph-hero__float ph-hero__float--right"><span class="ph-float-icon">⌘</span><span><b>THREE PHRASE SLOTS</b><small>Your message, your rules</small></span></div>
+        <h1>ZBROU <span>SCRIPTS</span></h1>
+        <p>Recursos para FiveM. Diseñados con detalle.</p>
+        <div class="store-hero__actions">
+          <a href="#scripts" class="store-btn store-btn--primary">Explorar scripts <span aria-hidden="true">↗</span></a>
+          <a href="https://zbrouscripts.gitbook.io/zbrou-scripts" target="_blank" rel="noopener noreferrer" class="store-btn store-btn--secondary">Documentación <span aria-hidden="true">↗</span></a>
         </div>
       </div>
-      <div class="ph-wrap ph-hero__rail"><span>BUILT BY ZBROU / 2026</span><span>DISCOVER MORE <i aria-hidden="true">↓</i></span></div>
+      <a href="#scripts" class="store-hero__scroll">DESLIZA PARA EXPLORAR <span aria-hidden="true">↓</span></a>
     </section>
 
-    <div class="ph-trust" aria-label="Store highlights">
-      <div class="ph-wrap ph-trust__inner">
-        <span><b>01</b> CONFIGURABLE</span>
-        <i aria-hidden="true"></i>
-        <span><b>02</b> FIVEM FOCUSED</span>
-        <i aria-hidden="true"></i>
-        <span><b>03</b> TEBEX CHECKOUT</span>
-        <i aria-hidden="true"></i>
-        <span><b>04</b> DOCUMENTED</span>
-      </div>
-    </div>
-
-    <section id="phrasekill" class="ph-feature ph-section">
-      <div class="ph-wrap">
-        <div class="ph-heading">
-          <p class="ph-eyebrow">01 / THE RELEASE</p>
-          <h2>One resource.<br /><em>Endless personality.</em></h2>
-          <p>We're starting with one thing, done with intention: PhraseKill.</p>
-        </div>
-        <div class="ph-feature__layout">
-          <div class="ph-feature__image">
-            <div class="ph-feature__art-wrap">
-              <img :src="phrasekillPackage?.image || '/phrasekill-poster.svg'" alt="PhraseKill FiveM product artwork" loading="lazy" />
-              <span class="ph-feature__image-corner">ZB / PHRASEKILL</span>
-            </div>
-            <div class="ph-feature__image-footer"><span>FIVEM SCRIPT / 001</span><span>CRAFTED BY ZBROU</span></div>
+    <section id="scripts" class="store-catalog">
+      <div class="store-wrap">
+        <div class="store-section-title">
+          <div>
+            <span>CATÁLOGO</span>
+            <h2>Nuestros scripts<span class="store-dot">.</span></h2>
           </div>
-          <div class="ph-feature__details">
-            <div class="ph-feature__meta"><span class="ph-pulse"></span> {{ phrasekillPackage ? 'PUBLISHED ON TEBEX' : 'PRODUCT SHOWCASE' }} <span>•</span> DIGITAL RESOURCE</div>
-            <h3>PhraseKill<span class="ph-accent">.</span></h3>
-            <p class="ph-feature__copy">Custom kill messages that feel like part of your server, not a generic notification. Create, style and save the exact experience you want players to see.</p>
-            <div class="ph-feature__facts">
-              <div><b>03</b><span>Phrase configurations</span></div>
-              <div><b>100</b><span>Font options in editor</span></div>
-              <div><b>FX</b><span>Motion, color & glow</span></div>
-            </div>
-            <div class="ph-feature__price">
-              <div><span>PRODUCT PRICE</span><strong v-if="phrasekillPackage">{{ $n(phrasekillPackage.base_price, 'currency') }}</strong><strong v-else>Not published</strong></div>
-              <span v-if="phrasekillPackage" class="ph-feature__available">Available through Tebex</span>
-              <span v-else class="ph-feature__await">Awaiting the live Tebex listing</span>
-            </div>
-            <div class="ph-actions ph-actions--wide">
-              <button class="ph-cta ph-cta--solid" type="button" :disabled="!phrasekillPackage || adding" @click="addPhrasekill">
-                {{ !phrasekillPackage ? 'Purchases coming soon' : adding ? 'Opening checkout…' : 'Add to basket' }} <span aria-hidden="true">↗</span>
-              </button>
-              <a class="ph-cta ph-cta--ghost" href="#preview">Watch preview <span aria-hidden="true">▷</span></a>
-            </div>
-            <p v-if="basketError" class="ph-feature__error" role="alert">{{ basketError }}</p>
-            <p class="ph-feature__fineprint">Purchases and payments are handled by Tebex. The price shown comes directly from the published listing.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <ScrollShowcase />
-
-    <section id="preview" class="ph-interactive ph-section">
-      <div class="ph-wrap">
-        <div class="ph-heading ph-heading--center">
-          <p class="ph-eyebrow">02 / INTERACTIVE LOOK</p>
-          <h2>A little preview of <em>what's possible.</em></h2>
-          <p>A visual concept of different PhraseKill effects. The actual in-game editor lets you configure your own.</p>
+          <small>{{ totalPackages ? totalPackages + (totalPackages === 1 ? ' recurso publicado' : ' recursos publicados') : 'Catálogo en preparación' }}</small>
         </div>
 
-        <div class="ph-lab">
-          <div class="ph-lab__chrome"><span><i></i><i></i><i></i></span><span>ZBROU / PHRASEKILL PREVIEW</span><span>INTERACTIVE CONCEPT</span></div>
-          <div class="ph-lab__screen" :class="'ph-lab__screen--' + selectedStyle">
-            <div class="ph-lab__crosshair" aria-hidden="true"><i></i><i></i></div>
-            <div class="ph-lab__kill" :key="selectedStyle"><span>{{ previewCopy }}</span><small>+ 1 ELIMINATION</small></div>
-            <div class="ph-lab__hud"><span>EXAMPLE EFFECT / NOT GAME FOOTAGE</span><span>PREVIEW_0{{ styles.indexOf(selectedStyle) + 1 }}</span></div>
-          </div>
-          <div class="ph-lab__controls">
-            <div><span class="ph-lab__controls-title">CHOOSE AN EFFECT</span><p>Switch styles to see the concept adapt.</p></div>
-            <div class="ph-lab__options" role="group" aria-label="PhraseKill demo effect">
-              <button v-for="style in styles" :key="style" type="button" :class="{ active: selectedStyle === style }" :aria-pressed="selectedStyle === style" @click="selectedStyle = style">{{ styleLabels[style] }}</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ph-benefits ph-section" id="features">
-      <div class="ph-wrap">
-        <div class="ph-heading"><p class="ph-eyebrow">03 / THE DETAILS</p><h2>Control the <em>little things.</em></h2><p>Built around personalization and straightforward configuration.</p></div>
-        <div class="ph-benefits__grid">
-          <article class="ph-benefit ph-benefit--large">
-            <div class="ph-benefit__number">01 / CONFIGURE</div><div class="ph-benefit__visual"><span class="ph-benefit__slot">SLOT 01 <i>ACTIVE</i></span><span class="ph-benefit__slot">SLOT 02 <i>READY</i></span><span class="ph-benefit__slot">SLOT 03 <i>READY</i></span></div>
-            <div><h3>Three ways to express yourself.</h3><p>Keep multiple saved phrases and switch between fixed or random selection.</p></div>
-          </article>
-          <article class="ph-benefit">
-            <div class="ph-benefit__number">02 / CUSTOMIZE</div><div class="ph-benefit__symbol" aria-hidden="true">Aa<span>.</span></div>
-            <div><h3>Your typography.</h3><p>Choose from an extensive font selection, plus color, sizing and positioning controls.</p></div>
-          </article>
-          <article class="ph-benefit">
-            <div class="ph-benefit__number">03 / ANIMATE</div><div class="ph-benefit__symbol ph-benefit__symbol--effects" aria-hidden="true"><span></span><span></span><span></span></div>
-            <div><h3>Make it move.</h3><p>Fine-tune animations, glow, timing and the feeling of each message.</p></div>
-          </article>
-          <article class="ph-benefit">
-            <div class="ph-benefit__number">04 / MANAGE</div><div class="ph-benefit__symbol" aria-hidden="true">⌘</div>
-            <div><h3>Control access.</h3><p>Set up permissions and manage who can use PhraseKill on your server.</p></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="ph-video ph-section" id="demo-video">
-      <div class="ph-wrap ph-video__layout">
-        <div class="ph-video__copy">
-          <p class="ph-eyebrow">04 / REAL PREVIEW</p>
-          <h2>Don't imagine it.<br /><em>See it.</em></h2>
-          <p>Watch the PhraseKill demonstration, then explore the documentation to understand the configuration.</p>
-          <a class="ph-cta ph-cta--ghost" href="https://youtu.be/AYea1bq0pv4" target="_blank" rel="noopener noreferrer">Open video on YouTube ↗</a>
-        </div>
-        <div class="ph-video__frame"><iframe title="PhraseKill demonstration on YouTube" loading="lazy" src="https://www.youtube-nocookie.com/embed/AYea1bq0pv4" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-      </div>
-    </section>
-
-    <section id="activity" class="ph-activity ph-section">
-      <div class="ph-wrap">
-        <div class="ph-heading ph-heading--center">
-          <p class="ph-eyebrow">05 / LIVE NETWORK</p>
-          <h2>Built for real <em>communities.</em></h2>
-          <p>When servers opt in to sharing aggregate usage metrics, their totals will appear here automatically.</p>
-        </div>
-        <div class="ph-activity__panel">
-          <div class="ph-activity__header">
-            <div><span class="ph-pulse" :class="{ 'ph-pulse--online': usage?.connected }"></span><strong>ZBROU NETWORK</strong><small>{{ usage?.connected ? 'CONNECTED · AGGREGATED METRICS' : 'AWAITING LIVE TELEMETRY' }}</small></div>
-            <span class="ph-activity__tag">{{ usage?.connected ? 'DATA CONNECTED' : 'NOT CONNECTED' }}</span>
-          </div>
-          <div class="ph-activity__stats">
-            <div><small>ACTIVE SERVERS</small><strong>{{ displayMetric(usage?.serversActive) }}</strong><span>{{ usage?.connected ? 'Reporting currently' : 'Not yet tracked' }}</span></div>
-            <div><small>ONLINE PLAYERS</small><strong>{{ displayMetric(usage?.playersOnline) }}</strong><span>{{ usage?.connected ? 'Across opted-in servers' : 'Not yet tracked' }}</span></div>
-            <div><small>INSTALLATIONS</small><strong>{{ displayMetric(usage?.installations) }}</strong><span>{{ usage?.connected ? 'Reported by telemetry' : 'Not yet tracked' }}</span></div>
-          </div>
-          <div class="ph-activity__feed">
-            <div class="ph-activity__feed-title">RECENT SERVER ACTIVITY <span>{{ usage?.recentActivity?.length ? 'VERIFIED EVENTS' : 'NO PUBLIC EVENTS' }}</span></div>
-            <div v-if="usage?.recentActivity?.length" class="ph-activity__feed-list">
-              <div v-for="(event, index) in usage.recentActivity" :key="event.time + index">
-                <span class="ph-activity__feed-dot"></span>
-                <strong>{{ event.type === 'activation' ? 'New PhraseKill activation' : 'Server currently reporting' }}</strong>
-                <time :datetime="event.time">{{ new Date(event.time).toLocaleString('en-GB') }}</time>
+        <div class="store-grid">
+          <article class="store-product">
+            <NuxtLink to="/script/phrasekill" class="store-product__image" aria-label="Ver los detalles de PhraseKill">
+              <img :src="phrasekillPackage?.image || '/phrasekill-poster.svg'" alt="PhraseKill para FiveM" loading="lazy" />
+              <span class="store-product__tag">FiveM</span>
+            </NuxtLink>
+            <div class="store-product__body">
+              <div class="store-product__heading">
+                <h3><NuxtLink to="/script/phrasekill">PhraseKill</NuxtLink></h3>
+                <span v-if="phrasekillPackage" class="store-product__price">{{ $n(phrasekillPackage.base_price, 'currency') }}</span>
+                <span v-else class="store-product__pending">Próximamente</span>
               </div>
+              <p>Mensajes de eliminación personalizados.</p>
+              <NuxtLink to="/script/phrasekill" class="store-product__detail">Ver producto <span aria-hidden="true">↗</span></NuxtLink>
             </div>
-            <p v-else>Verified server activity will appear here once an opt-in telemetry feed is connected. No fictional user names or purchases.</p>
-          </div>
-          <div class="ph-activity__note"><span aria-hidden="true">ⓘ</span><p>No invented sales, player or server counts. Real activity will appear once a server-side telemetry source is configured.</p><span v-if="usage?.updatedAt" class="ph-activity__timestamp">UPDATED {{ new Date(usage.updatedAt).toLocaleString('en-GB') }}</span></div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="ph-faq ph-section" id="faq">
-      <div class="ph-wrap ph-faq__layout">
-        <div><p class="ph-eyebrow">06 / GOOD TO KNOW</p><h2>Questions?<br /><em>We got you.</em></h2><p>Useful answers before you install.</p><a class="ph-cta ph-cta--ghost" href="https://zbrouscripts.gitbook.io/zbrou-scripts/frasekill" target="_blank" rel="noopener noreferrer">Read documentation ↗</a></div>
-        <div class="ph-faq__items">
-          <details><summary>What is PhraseKill?<span>+</span></summary><p>A FiveM script that displays customizable phrases when a player gets an elimination, with several visual and configuration options.</p></details>
-          <details><summary>Which frameworks are supported?<span>+</span></summary><p>The project is designed for ESX, QBCore, Qbox and standalone setups. Check the release documentation for tested versions and requirements.</p></details>
-          <details><summary>Can I save different styles?<span>+</span></summary><p>Yes. PhraseKill includes three saved phrase configurations with fixed or random selection options.</p></details>
-          <details><summary>How do I buy it?<span>+</span></summary><p>Once the package is published in Tebex, the product price and purchase button activate automatically. Tebex handles checkout and payment.</p></details>
-          <details><summary>How do live server statistics work?<span>+</span></summary><p>The panel only displays real aggregated numbers from an opt-in server-side telemetry integration. Until one is connected, values remain unavailable.</p></details>
+    <section class="store-activity" aria-labelledby="activity-heading">
+      <div class="store-wrap store-activity__row">
+        <div class="store-activity__intro">
+          <span>COMUNIDAD</span>
+          <h2 id="activity-heading">ZBrou en servidores reales</h2>
+          <p>Los datos aparecerán cuando conectemos servidores que acepten compartir su actividad.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="ph-outro">
-      <div class="ph-wrap ph-outro__inside">
-        <span>YOUR SERVER. YOUR SIGNATURE.</span><h2>Leave a lasting <em>impression.</em></h2>
-        <div class="ph-actions"><a class="ph-cta ph-cta--solid" href="#phrasekill">Discover PhraseKill ↗</a><a class="ph-cta ph-cta--ghost" href="https://github.com/zbrouscripts/docs" target="_blank" rel="noopener noreferrer">Documentation ↗</a></div>
-        <div class="ph-outro__watermark" aria-hidden="true">ZB</div>
+        <div class="store-activity__numbers">
+          <div><strong>{{ formatMetric(usage?.serversActive) }}</strong><span>Servidores activos</span></div>
+          <div><strong>{{ formatMetric(usage?.playersOnline) }}</strong><span>Jugadores conectados</span></div>
+        </div>
       </div>
     </section>
     <NuxtPage />
@@ -207,53 +67,84 @@
 <script setup lang="ts">
 import type { Package } from "~/types";
 useSeoMeta({
-  title: "ZBrou Scripts — PhraseKill for FiveM",
-  description: "PhraseKill by ZBrou: customizable FiveM kill messages, saved phrase slots, fonts, glow and visual effects. Explore the official store and documentation.",
-  ogTitle: "ZBrou Scripts | PhraseKill",
-  ogDescription: "Your message. Your style. Your moment. PhraseKill for FiveM.",
-  twitterCard: "summary_large_image",
+  title: "ZBrou Scripts · Tienda FiveM",
+  description: "Tienda oficial ZBrou Scripts. Recursos para servidores FiveM: PhraseKill y próximos lanzamientos. Compra segura con Tebex.",
 });
-useHead({
-  link: [
-    { rel: "preconnect", href: "https://fonts.googleapis.com" },
-    { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
-    { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" },
-  ],
-});
-const styles = ["classic", "aurora", "glitch"] as const;
-type Style = typeof styles[number];
-const styleLabels: Record<Style, string> = { classic: "Classic", aurora: "Aurora", glitch: "Glitch" };
-const previewMessages: Record<Style, string> = { classic: "ELIMINATED", aurora: "NICE SHOT", glitch: "NO MERCY" };
-const selectedStyle = ref<Style>("aurora");
-const previewCopy = computed(() => previewMessages[selectedStyle.value]);
+useHead({link:[{rel:"stylesheet",href:"https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Oxanium:wght@400;500;600;700;800&display=swap"}]});
 const categoryStore = useCategoryStore();
-const basketStore = useBasketStore();
-const uiStore = useUIStore();
 const { data: categories } = await useAsyncData("categories", () => categoryStore.fetchCategories());
-const phrasekillPackage = computed<Package | undefined>(() => {
-  const products = (categories.value ?? []).flatMap((category) => category.packages ?? []);
-  return products.find((pkg) => pkg.id === 7706999 || /phrase\s*kill/i.test(pkg.name));
-});
-interface Usage { connected: boolean; serversActive: number | null; playersOnline: number | null; installations: number | null; updatedAt: string | null; recentActivity: Array<{ type: "activation" | "heartbeat"; time: string }> }
+const products = computed<Package[]>(() => (categories.value ?? []).flatMap((cat) => cat.packages ?? []));
+const totalPackages = computed(() => products.value.length);
+const phrasekillPackage = computed(() => products.value.find((p) => p.id === 7706999 || /phrase\s*kill/i.test(p.name)));
+interface Usage { connected: boolean; serversActive: number | null; playersOnline: number | null; installations: number | null; updatedAt: string | null }
 const { data: usage } = await useFetch<Usage>("/api/usage");
-const displayMetric = (number: number | null | undefined) => typeof number === "number" ? number.toLocaleString("en-US") : "—";
-const adding = ref(false);
-const basketError = ref("");
-async function addPhrasekill() {
-  if (!phrasekillPackage.value || adding.value) return;
-  basketError.value = "";
-  adding.value = true;
-  try {
-    const result = await basketStore.addPackageToBasket(phrasekillPackage.value.id, 1);
-    if (result) uiStore.toggleItem("cart-sidebar");
-  } catch {
-    basketError.value = "Unable to start this purchase. Please try again or contact support.";
-  } finally {
-    adding.value = false;
-  }
+const formatMetric = (value: number | null | undefined) => typeof value === "number" ? value.toLocaleString("es-ES") : "—";
+const hero = ref<HTMLElement | null>(null);
+const scrollProgress = ref(0);
+let frame = 0;
+function updateScroll() {
+  frame = 0;
+  if (!hero.value || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rect = hero.value.getBoundingClientRect();
+  scrollProgress.value = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height)));
 }
+function onScroll() { if (!frame) frame = window.requestAnimationFrame(updateScroll); }
+onMounted(() => { window.addEventListener("scroll", onScroll, { passive: true }); window.addEventListener("resize", onScroll); onScroll(); });
+onUnmounted(() => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); if (frame) cancelAnimationFrame(frame); });
 </script>
 
-<style lang="scss">
-@use "~/assets/styles/phrasekill-landing.scss";
+<style scoped>
+.store-home{background:#000;color:#f4f6fa;font-family:Manrope,Arial,sans-serif;min-width:0;overflow:clip}
+.store-wrap{width:min(1200px,calc(100% - 40px));margin:auto}
+.store-hero{min-height:750px;min-height:calc(100svh - 40px);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;isolation:isolate;overflow:hidden;padding:105px 20px 95px;background:#000}
+.store-hero__ambience{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 55% 48% at 50% 45%,#24436a2b,transparent 85%),radial-gradient(circle at 82% 32%,#507fb013,transparent 37%);transform:translateY(calc(var(--shift)*-70px)) scale(calc(1 + var(--shift)*.25))}
+.store-hero__ambience:after{content:"";position:absolute;inset:0;opacity:.15;background-image:radial-gradient(#f2f7ff 0.7px,transparent .9px);background-size:67px 62px;mask-image:linear-gradient(transparent,#000 30%,#000 75%,transparent)}
+.store-hero__content{text-align:center;display:flex;align-items:center;flex-direction:column;position:relative;z-index:1;transform:translateY(calc(var(--shift)*-100px)) scale(calc(1 - var(--shift)*.07));opacity:calc(1 - var(--shift)*.75);will-change:transform,opacity}
+.store-hero__identity{display:flex;flex-direction:column;align-items:center;gap:16px}
+.store-hero__mark{width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 12px 22px #b9dcff16)}
+.store-hero__identity>span{font:600 11px Oxanium,Arial,sans-serif;letter-spacing:.29em;color:#aab8ca}
+.store-hero h1{font:700 clamp(58px,9vw,120px)/.95 Oxanium,Arial,sans-serif;letter-spacing:.035em;margin:30px 0 10px;color:#fff}
+.store-hero h1 span{color:#b9cbe3}
+.store-hero p{margin:18px 0 0;color:#a8b5c7;font-size:clamp(14px,1.4vw,17px);letter-spacing:.01em}
+.store-hero__actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:37px}
+.store-btn{min-height:48px;min-width:165px;padding:0 19px;display:inline-flex;align-items:center;justify-content:center;gap:24px;font-weight:700;font-size:13px;text-decoration:none;border-radius:11px;border:1px solid #ffffff2f;transition:background .2s,border-color .2s,transform .2s}
+.store-btn:hover{text-decoration:none;transform:translateY(-2px)}
+.store-btn--primary{background:#c3d4e9;color:#132438}.store-btn--primary:hover{background:#e7f0fc;color:#132438}
+.store-btn--secondary{background:#1b2029;color:#e6ecf6}.store-btn--secondary:hover{background:#272e3a;color:white}
+.store-hero__scroll{position:absolute;bottom:35px;color:#7d90a6;font:600 10px Oxanium,sans-serif;letter-spacing:.17em;text-decoration:none}
+.store-hero__scroll span{margin-left:15px;color:#bdcee4;font-size:18px}
+.store-hero__scroll:hover{color:#dae5f3}
+.store-catalog{scroll-margin-top:95px;padding:78px 0 110px;background:linear-gradient(#07090c,#0c1017);border-top:1px solid #ffffff13}
+.store-section-title{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:27px}
+.store-section-title>div>span,.store-activity__intro>span{font:600 11px Oxanium,Arial,sans-serif;letter-spacing:.2em;color:#9bb8d8}
+.store-section-title h2{font:700 clamp(30px,4vw,44px)/1.15 Oxanium,sans-serif;letter-spacing:-.02em;margin:10px 0 0}
+.store-dot{color:#a9c4e5}
+.store-section-title small{font-size:12px;color:#8b9bae;padding-bottom:5px}
+.store-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:22px}
+.store-product{max-width:355px;border:1px solid #ffffff2a;border-radius:23px;background:linear-gradient(145deg,#182330,#0c131c);overflow:hidden;box-shadow:inset 0 1px #ffffff13;transition:transform .25s,border-color .25s}
+.store-product:hover{transform:translateY(-5px);border-color:#9bb8df77}
+.store-product__image{position:relative;height:212px;display:block;overflow:hidden;background:#0c131d}
+.store-product__image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.store-product:hover img{transform:scale(1.055)}
+.store-product__tag{position:absolute;right:12px;top:12px;color:#ebf3ff;background:#182536dc;border:1px solid #ffffff47;padding:6px 10px;border-radius:7px;font:600 10px Oxanium,Arial,sans-serif}
+.store-product__body{padding:22px}
+.store-product__heading{display:flex;align-items:center;justify-content:space-between;gap:15px}
+.store-product h3{font:700 23px Oxanium,sans-serif;margin:0}
+.store-product h3 a{color:#fff;text-decoration:none}
+.store-product__price{color:#e3ecf8;font-size:16px;font-weight:700}
+.store-product__pending{color:#aab8ce;font-size:12px}
+.store-product__body p{color:#97a7bc;font-size:12px;margin:10px 0 20px}
+.store-product__detail{display:flex;justify-content:space-between;gap:15px;align-items:center;min-height:40px;border-top:1px solid #ffffff23;padding-top:15px;color:#d9e5f5;text-decoration:none;font-size:12px;font-weight:700}
+.store-product__detail:hover{color:#fff}
+.store-activity{padding:36px 0 47px;background:#0e1219;border-top:1px solid #ffffff19}
+.store-activity__row{display:flex;justify-content:space-between;align-items:center;gap:35px}
+.store-activity__intro h2{font:600 21px Oxanium,sans-serif;margin:9px 0}
+.store-activity__intro p{color:#8293a8;font-size:12px;margin:0;max-width:420px;line-height:1.6}
+.store-activity__numbers{display:flex;gap:0}
+.store-activity__numbers>div{padding:6px 32px;border-left:1px solid #ffffff24;text-align:center}
+.store-activity__numbers strong{display:block;font:700 30px Oxanium,Arial,sans-serif;color:#d5e4f8}
+.store-activity__numbers span{display:block;color:#8d9fb6;font-size:11px;margin-top:4px}
+@media(max-width:800px){.store-hero{min-height:700px}.store-hero h1{font-size:clamp(52px,10vw,83px)}.store-activity__row{flex-direction:column;align-items:flex-start}.store-activity__numbers{width:100%}.store-activity__numbers>div{flex:1;text-align:left;padding:6px 20px}.store-activity__numbers>div:first-child{padding-left:0;border-left:0}}
+@media(max-width:480px){.store-hero{min-height:650px;padding:85px 18px}.store-hero__mark{width:90px;height:90px}.store-hero h1{font-size:clamp(41px,10.5vw,60px);white-space:nowrap}.store-hero p{font-size:13px}.store-hero__identity>span{font-size:9px}.store-hero__actions{width:100%;gap:10px}.store-btn{flex:1;min-width:0;font-size:11px;gap:10px;padding:0 10px}.store-section-title{align-items:flex-start;flex-direction:column}.store-catalog{padding:58px 0 78px}.store-product{max-width:100%}.store-activity{padding:30px 0}}
+@media(prefers-reduced-motion:reduce){.store-hero__content,.store-hero__ambience{transform:none!important;opacity:1!important;will-change:auto}.store-btn,.store-product,.store-product img{transition:none!important}}
 </style>
