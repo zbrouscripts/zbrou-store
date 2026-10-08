@@ -30,7 +30,7 @@
         <div class="store-grid">
           <article class="store-product">
             <NuxtLink to="/script/phrasekill" class="store-product__image" aria-label="Ver los detalles de PhraseKill">
-              <img :src="phrasekillPackage?.image || '/phrasekill-poster.svg'" alt="PhraseKill para FiveM" loading="lazy" />
+              <img :src="phrasekillPackage?.image || '/phrasekill-original-cover.svg'" alt="PhraseKill para FiveM" loading="lazy" />
               <span class="store-product__tag">FiveM</span>
             </NuxtLink>
             <div class="store-product__body">
