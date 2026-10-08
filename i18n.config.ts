@@ -19,12 +19,12 @@ export default defineI18nConfig(() => ({
     },
     messages: {
         "en-US": {
-            store_name: "Example Store",
-            play: "example.play.com",
+            store_name: "ZBrou Scripts",
+            play: "ZBrou",
             index: {
                 hero: {
-                    title: "Hero Banner",
-                    subtitle: "CHECK OUT THE LATEST OFFERS",
+                    title: "ZBrou Scripts",
+                    subtitle: "FIVEM RESOURCES BY ZBROU",
                 },
             },
             buttons: {
@@ -66,7 +66,7 @@ export default defineI18nConfig(() => ({
             },
             footer: {
                 join_our_discord: "Join our Discord",
-                copyright: "© 2024 {storeName}. All rights reserved.",
+                copyright: "© 2026 {storeName}. All rights reserved.",
                 tebex: {
                     description:
                         "This website and its checkout process is operated by our online reseller & Merchant of Record, Tebex Limited, who also handles order-related inquiries and refunds.",
@@ -109,12 +109,12 @@ export default defineI18nConfig(() => ({
             },
         },
         "de-DE": {
-            store_name: "Beispiel Shop",
-            play: "beispiel.shop.de",
+            store_name: "ZBrou Scripts",
+            play: "ZBrou",
             index: {
                 hero: {
-                    title: "Hero Banner",
-                    subtitle: "SCHAUE DIR DIE NEUESTEN ANGEBOTE AN",
+                    title: "ZBrou Scripts",
+                    subtitle: "FIVEM RESOURCES BY ZBROU",
                 },
             },
             buttons: {
@@ -156,7 +156,7 @@ export default defineI18nConfig(() => ({
             },
             footer: {
                 join_our_discord: "Tritt unserem Discord bei",
-                copyright: "© 2024 {storeName}. Alle Rechte vorbehalten.",
+                copyright: "© 2026 {storeName}. Alle Rechte vorbehalten.",
                 tebex: {
                     description:
                         "Diese Website und ihr Checkout-Prozess werden von unserem Online-Reseller & Händler, Tebex Limited, betrieben, der auch für bestellbezogene Anfragen und Rückerstattungen zuständig ist.",
