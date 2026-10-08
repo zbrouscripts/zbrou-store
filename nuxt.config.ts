@@ -23,7 +23,7 @@ export default defineNuxtConfig({
 
         // Config that will be exposed to the client
         public: {
-            apiPublicKey: "yy7-6e7fe0ee11b433a4a3eb5d8f619848a4d235f2e4",
+            apiPublicKey: "",
             apiBaseUrl: "https://headless.tebex.io",
         },
     },
