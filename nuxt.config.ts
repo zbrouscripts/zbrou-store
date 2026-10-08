@@ -20,6 +20,9 @@ export default defineNuxtConfig({
     runtimeConfig: {
         // NOTE: This should never be moved to public or app config as it is private
         apiPrivateKey: "",
+        // Optional aggregate statistics integration; private token stays server-side.
+        zbrouUsageEndpoint: "",
+        zbrouUsageToken: "",
 
         // Config that will be exposed to the client
         public: {

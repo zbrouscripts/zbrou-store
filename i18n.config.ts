@@ -1,12 +1,103 @@
 export default defineI18nConfig(() => ({
     legacy: false,
-    locale: "en-US",
+    locale: "es-ES",
     numberFormats: {
+        "es-ES": { currency: { style: "currency", currency: "EUR", notation: "standard" } },
         "en-US": {
             currency: {
                 style: "currency",
                 currency: "USD",
                 notation: "standard",
+            },
+        },
+        "es-ES": {
+            store_name: "ZBrou Scripts",
+            play: "ZBrou",
+            index: {
+                hero: {
+                    title: "ZBrou Scripts",
+                    subtitle: "RECURSOS FIVEM DE ZBROU",
+                },
+            },
+            buttons: {
+                checkout: "Finalizar compra",
+                cart: "Cesta | Cesta ({n}) | Cesta ({n})",
+                add_to_cart: "Añadir a la cesta",
+                add_gift_to_cart: "Añadir regalo a la cesta",
+                gift: "Regalar",
+                login: "Acceder",
+                logout: "Cerrar sesión",
+                copied: "¡Copiado!",
+                home: "Inicio",
+                menu: "Menú",
+                go_to_top: "Subir arriba",
+            },
+            auth: {
+                login: {
+                    title: "Introduce tu usuario de {gameTypeName}",
+                },
+                logout: {
+                    title: "¿Seguro que quieres cerrar sesión?",
+                },
+                login_redirect: {
+                    title: "Pulsa aquí para acceder",
+                    method: "Acceder con {name}",
+                },
+                login_complete: {
+                    title: "Has iniciado sesión",
+                },
+                username: "Usuario",
+            },
+            gift: {
+                input_placeholder: "Usuario de {gameTypeName} del destinatario",
+            },
+            error: {
+                page_not_found: "Página no encontrada",
+                cannot_add_package:
+                    "No puedes comprar este producto",
+            },
+            footer: {
+                join_our_discord: "Únete a nuestro Discord",
+                copyright: "© 2026 {storeName}. Todos los derechos reservados.",
+                tebex: {
+                    description:
+                        "Las compras y los pagos son gestionados por Tebex Limited, que también atiende las consultas y devoluciones relacionadas con los pedidos.",
+                    impressum: "Impressum",
+                    privacy_policy: "Política de privacidad",
+                    tos: "Condiciones de servicio",
+                },
+            },
+            messages: {
+                success: {
+                    added_to_cart: "{name} añadido a la cesta",
+                    removed_from_cart: "{name} eliminado de la cesta",
+                },
+            },
+            sidebar: {
+                menu: "Menú",
+            },
+            titles: {
+                login: "Acceder",
+                package: "{name}",
+            },
+            checkout: {
+                completed: {
+                    title: "Gracias por tu compra",
+                    subtitle:
+                        "Recibirás tus productos en unos minutos",
+                },
+            },
+            cart: {
+                title: "Cart",
+                empty: "Tu cesta está vacía",
+                total: "Total",
+                item: {
+                    quantity: "x{quantity}",
+                    gift_to: "Regalo para {username}",
+                },
+            },
+            category: {
+                image_alt: "Imagen de la categoría {name}",
             },
         },
         "de-DE": {

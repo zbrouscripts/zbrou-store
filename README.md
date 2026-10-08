@@ -1,143 +1,33 @@
-# Tebex - Headless Store Template
+# ZBrou Store
 
-An integration of the Tebex Headless API built upon Nuxt, Vue 3 & Typescript for kickstarting your next store design.
+Tienda independiente de **ZBrou Scripts** para FiveM. Nuxt 3 + Cloudflare Pages + Tebex Headless.
 
-## Demo
+## Diseño actual
 
-You can view a live demo of this repo by visiting https://tebex-headless-template.pages.dev.
+- Portada compacta en español, inspirada en la maqueta `zbrou-preview-para-otro-chat.zip`.
+- Logotipo original ZBrou y portada original del producto PhraseKill.
+- Inicio, catálogo de scripts y un bloque discreto de servidores.
+- Una tarjeta de PhraseKill en el catálogo, con ficha propia en `/script/phrasekill`.
+- Carrito y autentificación de Tebex conservados desde la plantilla.
+- Los precios proceden exclusivamente del catálogo de Tebex. Si el producto no está publicado, no se puede comprar.
+- Animación ligera del inicio asociada al desplazamiento, con soporte de movimiento reducido.
 
-## ⚡ Setup
-Make sure to install the dependencies:
+## Publicación
 
-```bash
-# npm
-npm install
+Cloudflare Pages: proyecto `zbrou-store`; rama pública `main`; rama de pruebas `design/phrasekill-showcase`.
 
-# pnpm
-pnpm install
+Variables de compilación:
+- `NITRO_PRESET=cloudflare_pages`
+- `NUXT_PUBLIC_API_PUBLIC_KEY=` token público de Tebex
 
-# yarn
-yarn install
+La clave privada de Tebex se guarda **solo como Secret** en Cloudflare si es necesaria (`NUXT_API_PRIVATE_KEY`). Nunca publicarla ni compartirla en GitHub.
 
-# bun
-bun install
-```
+## Estadísticas
 
-Create a .env file
+`/api/usage` no devuelve cifras inventadas. Hasta configurar un proveedor agregado real, muestra valores no disponibles. Para conectarlo sin datos personales ni nombres de servidores, utilizar `NUXT_ZBROU_USAGE_ENDPOINT` y el secreto opcional `NUXT_ZBROU_USAGE_TOKEN`.
 
-```bash
-cp .env.example .env # Fill out all the necessary fields
-```
+## Comprobaciones
 
-## 🔑 Getting your API key
-Head to the [API keys](https://creator.tebex.io/developers/api-keys) page within your creator panel. You'll find a private key and a public token.
+`npm ci`, `npm run build`. GitHub Actions comprueba compilación y, si el entorno permite levantar Nuxt, ejecuta `scripts/visual-smoke.mjs` en Chrome para comprobar portada, catálogo, ficha, menú móvil y desbordamientos.
 
-Inside your **.env** file, do the following:
-1. Set the `NUXT_PUBLIC_API_PUBLIC_KEY` key to your public token.
-2. Set the `NUXT_API_PRIVATE_KEY` key to your private key.
-
-## ⚙️ Configuring
-Update config in `app.config.ts` with your custom configuration options for your webstore.
-
-## 🎨 Changing the colour scheme 
-There is a default theme for the webstore which is configurable.
-
-Within the `assets/styles/theme.scss` file you can specify variable overrides.
-
-```scss
-// More information can be found here https://sass-lang.com/documentation/at-rules/use/#configuration
-@forward "./settings" with (
-  // Base settings
-  $pure-black: #000000,
-  $pure-white: #ffffff,
-
-  // Background
-  $background-100: #ffffff,
-  $background-200: #f2f2f2,
-
-  // Colour pallette
-  $c-100: #e5e5e5,
-  $c-200: #d1cfc6,
-  $c-300: #cccccc,
-  $c-400: #b2b2b2,
-  $c-500: #7f7f7f,
-  $c-600: #666666,
-  $c-700: #4d4d4d,
-  $c-800: #333333,
-  $c-900: #1a1a1a,
-
-  $text-high-emphasis-color: #000000,
-  $text-base-color: #000000,
-  $modal-close-color: #000000
-);
-```
-
-## 🚀 Deploying 
-Once you're ready to deploy your new store we recommend using a serverless platform such as [Cloudflare Pages](https://pages.cloudflare.com/). They have documentation for [deploying a Nuxt site](https://developers.cloudflare.com/pages/framework-guides/deploy-a-nuxt-site/) which only takes a few minutes to get setup.
-
-As stated in the nuxt documentation the .env file will not be read by the server when deployed. You will need to specifiy these for the server at runtime.
-
-- https://developers.cloudflare.com/pages/configuration/build-configuration/#environment-variables
-- https://nuxt.com/docs/guide/directory-structure/env#production-preview
-
-## 👩‍💻 Development
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Building for Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-#### Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-## 🔗 Useful Links
-
-- [Headless API Documentation](https://docs.tebex.io/developers/headless-api/overview)
-- [Tebex.js Documentation](https://docs.tebex.io/developers/tebex.js)
-- [Nuxt](https://nuxt.com/docs)
-- [Vue 3](https://vuejs.org/guide/introduction.html)
-
-## 🙋‍♂️ Support
-For issues relating to this template (https://github.com/tebexio/Headless-Template) please contact [support@tebex.io.](mailto:support@tebex.io)
+**No fusionar la rama hasta validar la vista previa de Cloudflare y las operaciones reales de compra con Tebex.**
