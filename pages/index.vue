@@ -4,7 +4,7 @@
       <div class="store-hero__ambience" aria-hidden="true"></div>
       <div class="store-hero__content">
         <div class="store-hero__identity">
-          <img class="store-hero__mark" src="/zbrou-original-logo.svg" width="110" height="110" alt="Logotipo de ZBrou" />
+          <img class="store-hero__mark"  :src="zbrouBrandImage" width="110" height="110" alt="Logotipo de ZBrou" />
           <span>TIENDA OFICIAL · FIVEM</span>
         </div>
         <h1>ZBROU <span>SCRIPTS</span></h1>
@@ -30,7 +30,7 @@
         <div class="store-grid">
           <article class="store-product">
             <NuxtLink to="/script/phrasekill" class="store-product__image" aria-label="Ver los detalles de PhraseKill">
-              <img :src="phrasekillPackage?.image || '/phrasekill-original-cover.svg'" alt="PhraseKill para FiveM" loading="lazy" />
+              <img :src="phrasekillPackage?.image || phrasekillCoverImage" alt="PhraseKill para FiveM" loading="lazy" />
               <span class="store-product__tag">FiveM</span>
             </NuxtLink>
             <div class="store-product__body">
@@ -66,6 +66,7 @@
 
 <script setup lang="ts">
 import type { Package } from "~/types";
+import { zbrouBrandImage, phrasekillCoverImage } from "~/utils/brandImages";
 useSeoMeta({
   title: "ZBrou Scripts · Tienda FiveM",
   description: "Tienda oficial ZBrou Scripts. Recursos para servidores FiveM: PhraseKill y próximos lanzamientos. Compra segura con Tebex.",
