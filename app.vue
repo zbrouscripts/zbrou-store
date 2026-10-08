@@ -1,6 +1,6 @@
 <template>
     <Head>
-        <link rel="icon" type="image/svg+xml" href="/zbrou-original-logo.svg" />
+        <link rel="icon" type="image/webp" :href="zbrouBrandImage" />
     </Head>
 
     <NuxtLayout>
@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import { zbrouBrandImage } from "~/utils/brandImages";
 import "~/assets/styles/main.scss";
 import { isClient } from "@vueuse/core";
 
