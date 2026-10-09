@@ -1,9 +1,9 @@
 <template>
   <main class="zb-store">
     <a class="zb-skip" href="#scripts">Ir a los scripts</a>
-    <section id="inicio" ref="hero" class="zb-hero" aria-labelledby="page-title">
+    <section id="inicio" class="zb-hero" aria-labelledby="page-title">
       <div class="zb-hero__light" aria-hidden="true"></div>
-      <div ref="heroContent" class="zb-hero__content" style="transform:translateY(0px) scale(1);opacity:1">
+      <div class="zb-hero__content">
         <span class="zb-eyebrow zb-hero__eyebrow"><i></i> RECURSOS PARA FIVEM</span>
         <img class="zb-hero__logo" :src="zbrouBrandImage" width="112" height="112" alt="Logotipo original de ZBrou" />
         <h1 id="page-title"><span>ZBROU</span><small>SCRIPTS</small></h1>
@@ -97,30 +97,11 @@ async function addToBasket(product: StoreProduct) {
 const { enabled: motionEnabled, toggle } = useStoreMotion();
 const cardMotion = createProductMotion(() => motionEnabled.value);
 useVisibleAnimations('.zb-hero, .zb-social, .zb-experience, .zb-community-cta');
-const hero = ref<HTMLElement | null>(null), heroContent = ref<HTMLElement | null>(null);
-let progress = -1;
-// Scroll only changes this layer; it must not re-render the catalogue and its children.
-function setHeroProgress(next: number) {
-  if (!heroContent.value || progress === next) return;
-  progress = next;
-  heroContent.value.style.transform = "translateY(" + next * 70 + "px) scale(" + (1 - next * .08) + ")";
-  heroContent.value.style.opacity = String(1 - next * .8);
-}
-let frame = 0;
-function updateScene() {
-  frame = 0;
-  if (!motionEnabled.value || !hero.value) return;
-  const box = hero.value.getBoundingClientRect(); setHeroProgress(Math.max(0, Math.min(1, -box.top / Math.max(1, box.height))));
-}
-function scheduleScene() { if (!frame) frame = requestAnimationFrame(updateScene); }
 function moveCard(event: PointerEvent) {
   cardMotion.move(event);
 }
 function resetCard() { cardMotion.reset(); }
-function resizeScene() {
-  resetCard(); scheduleScene();
-}
-watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else { setHeroProgress(0); resetCard(); } });
-onMounted(() => { window.addEventListener("scroll", scheduleScene, { passive: true }); window.addEventListener("resize", resizeScene, { passive: true }); scheduleScene(); });
-onUnmounted(() => { cancelAnimationFrame(frame); resetCard(); window.removeEventListener("scroll", scheduleScene); window.removeEventListener("resize", resizeScene); });
+watch(motionEnabled, enabled => { if (!enabled) resetCard(); });
+onMounted(() => { window.addEventListener("resize", resetCard, { passive: true }); });
+onUnmounted(() => { resetCard(); window.removeEventListener("resize", resetCard); });
 </script>

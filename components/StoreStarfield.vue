@@ -15,8 +15,8 @@ onMounted(() => {
   const node = canvas.value, ctx = node.getContext('2d', { desynchronized: true });
   if (!ctx) return;
   let width = 0, height = 0, stars = [], frame = 0, time = 0, textureTimer = 0;
-  // The decorative field has its own budget, leaving time for scroll and foreground effects.
-  const pacer = createFramePacer(30);
+  // Smooth decorative motion, still bounded independently of high-refresh displays.
+  const pacer = createFramePacer(60);
   function prepareAuroras() {
     const textureWidth = Math.max(innerWidth * .75, 580), textureHeight = innerHeight * .65;
     for (const [texture, color] of [[auroraOne.value, '#416ee5'], [auroraTwo.value, '#277d98']]) {

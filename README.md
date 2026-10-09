@@ -7,8 +7,9 @@ La única tienda pública es https://zbrou-store.pages.dev, desplegada desde mai
 
 Logo y portadas originales del ZIP, Oxanium/Manrope, cristal oscuro y acentos azul hielo.
 Cabecera con navegación centrada, Discord, cesta y acceso FiveM. Fondo con auroras,
-partículas y estelas; reflejos y profundidad en tarjetas, brillo en botones, paralaje
-del logo y carrusel de actividad. La pausa controla todos los efectos sin colapsar la
+partículas y estelas; reflejos y profundidad en tarjetas, brillo en botones
+y carrusel de actividad. La marca mantiene su posición, escala y opacidad al
+hacer scroll, sin desvanecimiento ni paralaje. La pausa controla los efectos sin colapsar la
 página. Se respeta reducir movimiento salvo que el usuario active expresamente la
 animación, y su elección se guarda.
 
@@ -72,8 +73,8 @@ Las fuentes originales conservan su licencia en public/fonts/OFL.txt.
 
 ## Rendimiento de las animaciones
 
-El fondo decorativo tiene un presupuesto de 30 dibujos por segundo para no
-competir con el scroll y las animaciones de la interfaz. Su reloj conserva los intervalos fraccionarios de
+El fondo decorativo tiene un presupuesto de 60 dibujos por segundo para que las
+partículas y estelas avancen con más continuidad. Su reloj conserva los intervalos fraccionarios de
 las pantallas de 60–165 Hz. Su velocidad depende del tiempo real, sin reducir las
 partículas, los brillos, las estelas ni los desenfoques. El fondo se anima por sí
 solo y no se desplaza al mover el ratón. Los reflejos de las tarjetas
@@ -81,29 +82,30 @@ agrupan los movimientos del puntero una vez por fotograma. `npm run test:motion`
 comprueba cadencia, velocidad, pausas y recuperación tras un bloqueo del navegador.
 
 Las animaciones decorativas alejadas de la pantalla o en una pestaña oculta se
-pausan y continúan desde el mismo punto al volver. El paralaje modifica solo su
-capa visual, sin volver a renderizar el catálogo durante el scroll. Los WebP del
+pausan y continúan desde el mismo punto al volver. La portada no registra un
+controlador de scroll ni modifica estilos de la marca al desplazar la página. Los WebP del
 logo y la portada conservan los píxeles RGBA de los PNG originales. El favicon usa
 su propia versión de 64 px. Las estadísticas se consultan en paralelo en el cliente.
 
 Las auroras rasterizan su degradado y desenfoque de 85 px al cambiar de tamaño y
 reutilizan la textura al animar su transformación y opacidad. Mantienen posición,
-colores, halo y duraciones. El título conserva sus letras y degradado con un
-presupuesto de 30 cambios de color por segundo, manteniendo su ciclo de 9 segundos.
+colores, halo y duraciones. El título conserva sus letras, degradado y ciclo de 9
+segundos, con una interpolación lineal continua en lugar de escalones.
 Las auroras conservan el CSS original como respaldo cuando el navegador no
 soporta la preparación de texturas. El canvas de estrellas ya no modifica atributos
 del DOM en cada dibujo. La prueba local de renderizado y scroll está fuera del
 código publicado; sus tiempos de callbacks no se presentan como FPS de pantalla.
 
 El reflejo de las tarjetas aplica la última posición del ratón en el siguiente
-fotograma. La inclinación usa una interpolación breve de 35 ms, sin encadenar
-transiciones de 250 ms ni mantener un bucle cuando ya está en reposo.
+fotograma. La inclinación usa amortiguación crítica, con arranque y frenada suaves,
+sin encadenar transiciones ni mantener un bucle cuando ya está en reposo.
 El reflejo conserva su radio y color,
 pero mueve una capa con el degradado fijo en vez de repintarlo. Las coordenadas
 se calculan al empezar a seguir el puntero y se ajustan al scroll; no se leen de
 la tarjeta ya inclinada en cada movimiento. El retorno suave al salir se mantiene.
-La inclinación alcanza el 90 % del objetivo en unos 81 ms,
-independientemente de la frecuencia de refresco.
+La inclinación alcanza el 90 % del objetivo en unos 130 ms,
+independientemente de la frecuencia de refresco. Los botones y paneles usan
+transiciones de 350 ms y una curva de salida suave.
 
 El retorno de FiveM usa `auth_callback=1`, sin colisionar con el `success` de Tebex.
 La identidad se confirma contra la cesta antes de limpiar el callback. `npm run
