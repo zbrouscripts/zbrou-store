@@ -6,7 +6,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "test:motion": "node --test tests/framePacer.test.cjs tests/visibleAnimations.test.cjs tests/heroMotion.test.cjs tests/auroraTexture.test.cjs",
+    "test:motion": "node --test tests/framePacer.test.cjs tests/visibleAnimations.test.cjs tests/heroMotion.test.cjs tests/auroraTexture.test.cjs tests/pointerMotion.test.cjs",
     "test:auth": "node --test tests/authCallback.test.cjs",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",

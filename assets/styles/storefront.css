@@ -83,8 +83,10 @@ html[data-zb-motion="off"] *,html[data-zb-motion="off"] *::before,html[data-zb-m
 .zb-sort{width:100%}.zb-sort select{width:100%;font-size:11px;color:#91a7c3;background:#0a1323;border:1px solid #a9c9ff25;border-radius:10px;padding:12px;cursor:pointer;outline-offset:3px}
 .zb-catalog__count{font-size:10px;color:#607a9b;padding:19px 2px 14px}
 .zb-product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;align-items:start}.zb-product-grid--single{grid-template-columns:minmax(0,340px);justify-content:center}
-.zb-product{position:relative;min-width:0;border-radius:18px;border:1px solid #b1ccf12a;background:linear-gradient(145deg,#19273bdc,#0e1829e6 55%,#18263ac4);box-shadow:inset 0 1px #d7e8ff09,0 8px 20px #0002;overflow:hidden;isolation:isolate;transform:perspective(850px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .25s,border-color .25s,box-shadow .25s}
-.zb-product::before{content:"";position:absolute;inset:0;background:radial-gradient(250px at var(--shine-x,50%) var(--shine-y,-100px),#badfff1c,transparent);pointer-events:none;z-index:2}
+.zb-product{position:relative;min-width:0;border-radius:18px;border:1px solid #b1ccf12a;background:linear-gradient(145deg,#19273bdc,#0e1829e6 55%,#18263ac4);box-shadow:inset 0 1px #d7e8ff09,0 8px 20px #0002;overflow:hidden;isolation:isolate;transform:perspective(850px) rotateX(0deg) rotateY(0deg);transition:transform .25s,border-color .25s,box-shadow .25s}
+.zb-product__shine{position:absolute;left:50%;top:-350px;width:500px;height:500px;transform:translateX(-50%);background:radial-gradient(circle closest-side,#badfff1c,transparent);pointer-events:none;z-index:2}
+.zb-product--tracking{transition:border-color .25s,box-shadow .25s;will-change:transform}
+.zb-product--tracking>.zb-product__shine{left:0;top:0;will-change:transform}
 .zb-product:hover{border-color:#aacdff66;box-shadow:0 14px 36px #0005,0 0 25px #65adff0c}.zb-product--featured{border-color:#93c8ff53}
 .zb-product__art{position:relative;display:block;aspect-ratio:1.58;overflow:hidden;background:#07101b;border-bottom:1px solid #8ab9ff20}
 .zb-product__art img{width:100%;height:100%;object-fit:cover;filter:hue-rotate(var(--card-hue,0deg));transition:transform .7s,filter .7s}

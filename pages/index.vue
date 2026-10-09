@@ -34,6 +34,7 @@
       <p class="zb-catalog__count" role="status">{{ visibleProducts.length }} {{ visibleProducts.length === 1 ? 'script' : 'scripts' }}<span v-if="query"> para «{{ query }}»</span></p>
       <div v-if="visibleProducts.length" class="zb-product-grid" :class="{ 'zb-product-grid--single': visibleProducts.length === 1 }">
         <article v-for="product in visibleProducts" :key="product.id" class="zb-product" :class="{ 'zb-product--featured': product.featured }" @pointermove="moveCard" @pointerleave="resetCard">
+          <span class="zb-product__shine" aria-hidden="true"></span>
           <div class="zb-product__art">
             <a class="zb-product__image-link" :href="product.href" target="_blank" rel="noopener noreferrer" :aria-label="'Ver detalles de ' + product.name + ' en una pestaña nueva'">
               <img :src="product.image" :alt="'Portada de ' + product.name" width="1536" height="1024" loading="lazy" />
@@ -77,6 +78,7 @@
 </template>
 <script setup lang="ts">
 import { zbrouBrandImage } from "~/utils/brandImages";
+import { createProductMotion } from "~/utils/pointerMotion";
 import { getCatalogProducts, type StoreProduct } from "~/utils/storeCatalog";
 useSeoMeta({ title: "ZBrou Scripts · Tienda FiveM", description: "Recursos para FiveM con identidad ZBrou. Explora la colección y compra a través de Tebex." });
 const config = useRuntimeConfig();
@@ -100,6 +102,7 @@ async function addToBasket(product: StoreProduct) {
   catch { message.value = "No se ha podido añadir el producto. Inténtalo de nuevo."; }
 }
 const { enabled: motionEnabled, toggle } = useStoreMotion();
+const cardMotion = createProductMotion(() => motionEnabled.value);
 useVisibleAnimations('.zb-hero, .zb-social, .zb-experience, .zb-community-cta');
 const hero = ref<HTMLElement | null>(null), heroContent = ref<HTMLElement | null>(null);
 let progress = -1;
@@ -110,8 +113,7 @@ function setHeroProgress(next: number) {
   heroContent.value.style.transform = "translateY(" + next * 70 + "px) scale(" + (1 - next * .08) + ")";
   heroContent.value.style.opacity = String(1 - next * .8);
 }
-let frame = 0, cardFrame = 0;
-let cardPointer: { node: HTMLElement; x: number; y: number } | null = null;
+let frame = 0;
 function updateScene() {
   frame = 0;
   if (!motionEnabled.value || !hero.value) return;
@@ -119,25 +121,13 @@ function updateScene() {
 }
 function scheduleScene() { if (!frame) frame = requestAnimationFrame(updateScene); }
 function moveCard(event: PointerEvent) {
-  if (!motionEnabled.value || event.pointerType === "touch") return;
-  cardPointer = { node: event.currentTarget as HTMLElement, x: event.clientX, y: event.clientY };
-  if (!cardFrame) cardFrame = requestAnimationFrame(updateCard);
+  cardMotion.move(event);
 }
-function updateCard() {
-  cardFrame = 0;
-  if (!motionEnabled.value || !cardPointer) return;
-  const { node, x, y } = cardPointer, box = node.getBoundingClientRect();
-  node.style.setProperty("--shine-x", (x - box.left) + "px"); node.style.setProperty("--shine-y", (y - box.top) + "px");
-  node.style.setProperty("--tilt-x", ((y - box.top) / box.height - .5) * -4 + "deg");
-  node.style.setProperty("--tilt-y", ((x - box.left) / box.width - .5) * 5 + "deg");
+function resetCard() { cardMotion.reset(); }
+function resizeScene() {
+  resetCard(); scheduleScene();
 }
-function clearCard() {
-  cancelAnimationFrame(cardFrame); cardFrame = 0;
-  if (cardPointer) ["--shine-x", "--shine-y", "--tilt-x", "--tilt-y"].forEach(p => cardPointer!.node.style.removeProperty(p));
-  cardPointer = null;
-}
-function resetCard() { clearCard(); }
-watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else { setHeroProgress(0); clearCard(); } });
-onMounted(() => { window.addEventListener("scroll", scheduleScene, { passive: true }); window.addEventListener("resize", scheduleScene, { passive: true }); scheduleScene(); });
-onUnmounted(() => { cancelAnimationFrame(frame); clearCard(); window.removeEventListener("scroll", scheduleScene); window.removeEventListener("resize", scheduleScene); });
+watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else { setHeroProgress(0); resetCard(); } });
+onMounted(() => { window.addEventListener("scroll", scheduleScene, { passive: true }); window.addEventListener("resize", resizeScene, { passive: true }); scheduleScene(); });
+onUnmounted(() => { cancelAnimationFrame(frame); resetCard(); window.removeEventListener("scroll", scheduleScene); window.removeEventListener("resize", resizeScene); });
 </script>

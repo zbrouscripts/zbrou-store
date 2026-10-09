@@ -7,6 +7,7 @@
 <script setup>
 import { createFramePacer } from '~/utils/framePacer';
 import { renderAuroraTexture } from '~/utils/auroraTexture';
+import { followPointer } from '~/utils/pointerMotion';
 const props = defineProps({ enabled: { type: Boolean, default: false } });
 const canvas = ref(null);
 const auroraOne = ref(null), auroraTwo = ref(null);
@@ -41,7 +42,7 @@ onMounted(() => {
   }
   function draw(dt) {
     time += dt; ctx.clearRect(0, 0, width, height);
-    offsetX += (targetX - offsetX) * Math.min(dt * 3, 1); offsetY += (targetY - offsetY) * Math.min(dt * 3, 1);
+    offsetX = followPointer(offsetX, targetX, dt); offsetY = followPointer(offsetY, targetY, dt);
     for (const star of stars) {
       star.x += dt * (6 + star.depth * 12); star.y -= dt * (10 + star.depth * 18);
       if (star.y < -10) { star.y = height + 10; star.x = Math.random() * width; }

@@ -90,6 +90,14 @@ soporta la preparación de texturas. El canvas de estrellas ya no modifica atrib
 del DOM en cada dibujo. La prueba local de renderizado y scroll está fuera del
 código publicado; sus tiempos de callbacks no se presentan como FPS de pantalla.
 
+Las tarjetas aplican la última posición del ratón en el siguiente fotograma,
+sin encadenar transiciones de 250 ms. El reflejo conserva su radio y color,
+pero mueve una capa con el degradado fijo en vez de repintarlo. Las coordenadas
+se calculan al empezar a seguir el puntero y se ajustan al scroll; no se leen de
+la tarjeta ya inclinada en cada movimiento. El retorno suave al salir se mantiene.
+El paralaje del fondo conserva su recorrido y profundidad con una respuesta
+del 90 % en unos 81 ms, independiente de la cadencia de dibujo.
+
 El retorno de FiveM usa `auth_callback=1`, sin colisionar con el `success` de Tebex.
 La identidad se confirma contra la cesta antes de limpiar el callback. `npm run
 test:auth` comprueba los parámetros, la persistencia y la recuperación de errores.
