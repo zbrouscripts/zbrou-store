@@ -1,21 +1,34 @@
 <template>
   <div class="zb-atmosphere" aria-hidden="true">
-    <div class="zb-aurora zb-aurora--one"></div><div class="zb-aurora zb-aurora--two"></div>
+    <div class="zb-aurora zb-aurora--one"><canvas ref="auroraOne" class="zb-aurora__texture"></canvas></div><div class="zb-aurora zb-aurora--two"><canvas ref="auroraTwo" class="zb-aurora__texture"></canvas></div>
     <div class="zb-grid"></div><canvas ref="canvas" class="zb-stars" :data-motion="enabled ? 'running' : 'paused'"></canvas>
   </div>
 </template>
 <script setup>
 import { createFramePacer } from '~/utils/framePacer';
+import { renderAuroraTexture } from '~/utils/auroraTexture';
 const props = defineProps({ enabled: { type: Boolean, default: false } });
 const canvas = ref(null);
+const auroraOne = ref(null), auroraTwo = ref(null);
 let stop = () => {};
 onMounted(() => {
-  const node = canvas.value, ctx = node.getContext('2d');
+  const node = canvas.value, ctx = node.getContext('2d', { desynchronized: true });
   if (!ctx) return;
-  let width = 0, height = 0, stars = [], frame = 0, time = 0, ticks = 0;
-  const pacer = createFramePacer(60);
+  let width = 0, height = 0, stars = [], frame = 0, time = 0, textureTimer = 0;
+  // The decorative field has its own budget, leaving time for scroll and foreground effects.
+  const pacer = createFramePacer(30);
   let targetX = 0, targetY = 0, offsetX = 0, offsetY = 0;
+  function prepareAuroras() {
+    const textureWidth = Math.max(innerWidth * .75, 580), textureHeight = innerHeight * .65;
+    for (const [texture, color] of [[auroraOne.value, '#416ee5'], [auroraTwo.value, '#277d98']]) {
+      if (texture && renderAuroraTexture(texture, textureWidth, textureHeight, color)) {
+        texture.parentElement.dataset.textureReady = 'true';
+      }
+    }
+  }
   function resize() {
+    clearTimeout(textureTimer); textureTimer = window.setTimeout(prepareAuroras, 120);
+    if (width === document.documentElement.clientWidth && height === innerHeight) return;
     width = document.documentElement.clientWidth; height = innerHeight;
     const dpr = Math.min(devicePixelRatio || 1, 1.5);
     node.width = Math.round(width * dpr); node.height = Math.round(height * dpr);
@@ -27,7 +40,7 @@ onMounted(() => {
     draw(0);
   }
   function draw(dt) {
-    time += dt; node.dataset.frame = String(++ticks); ctx.clearRect(0, 0, width, height);
+    time += dt; ctx.clearRect(0, 0, width, height);
     offsetX += (targetX - offsetX) * Math.min(dt * 3, 1); offsetY += (targetY - offsetY) * Math.min(dt * 3, 1);
     for (const star of stars) {
       star.x += dt * (6 + star.depth * 12); star.y -= dt * (10 + star.depth * 18);
@@ -69,7 +82,7 @@ onMounted(() => {
   const unwatch = watch(() => props.enabled, sync);
   window.addEventListener('resize', resize, { passive: true }); window.addEventListener('pointermove', pointer, { passive: true });
   document.addEventListener('visibilitychange', sync); resize(); sync();
-  stop = () => { unwatch(); cancelAnimationFrame(frame); window.removeEventListener('resize', resize); window.removeEventListener('pointermove', pointer); document.removeEventListener('visibilitychange', sync); };
+  stop = () => { unwatch(); cancelAnimationFrame(frame); clearTimeout(textureTimer); window.removeEventListener('resize', resize); window.removeEventListener('pointermove', pointer); document.removeEventListener('visibilitychange', sync); };
 });
 onUnmounted(() => stop());
 </script>

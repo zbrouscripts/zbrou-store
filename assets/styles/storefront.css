@@ -33,6 +33,9 @@ html[data-zb-motion="off"] *,html[data-zb-motion="off"] *::before,html[data-zb-m
 .zb-aurora{position:absolute;width:75vw;height:65vh;min-width:580px;border-radius:50%;filter:blur(85px);opacity:.28;mix-blend-mode:screen;animation:zb-aurora-shift 18s ease-in-out infinite alternate;will-change:transform}
 .zb-aurora--one{top:-28%;left:-25%;background:radial-gradient(ellipse,#416ee5,transparent 68%)}
 .zb-aurora--two{right:-30%;bottom:-25%;background:radial-gradient(ellipse,#277d98,transparent 68%);animation-duration:23s;animation-direction:alternate-reverse}
+.zb-aurora__texture{display:none;position:absolute;left:-255px;top:-255px;width:calc(100% + 510px);height:calc(100% + 510px);max-width:none;pointer-events:none}
+.zb-aurora[data-texture-ready="true"]{filter:none;background:none}
+.zb-aurora[data-texture-ready="true"]>.zb-aurora__texture{display:block}
 @keyframes zb-aurora-shift{to{transform:translate(17vw,22vh) scale(1.2);opacity:.5}}
 
 .zb-grid{position:absolute;inset:0;background-image:linear-gradient(#8bb7ff04 1px,transparent 1px),linear-gradient(90deg,#8bb7ff04 1px,transparent 1px);background-size:70px 70px;mask-image:linear-gradient(transparent,#0009 30%,transparent 95%)}
@@ -44,7 +47,7 @@ html[data-zb-motion="off"] *,html[data-zb-motion="off"] *::before,html[data-zb-m
 .zb-hero__logo{width:112px;height:112px;object-fit:contain;mix-blend-mode:screen;filter:drop-shadow(0 0 22px #8acaff25);animation:zb-logo-float 6s ease-in-out infinite}
 @keyframes zb-logo-float{50%{transform:translateY(-8px)}}
 .zb-hero h1{font:700 clamp(76px,9vw,134px)/.95 Oxanium,sans-serif;letter-spacing:.09em;margin:20px 0 0;padding-left:.09em;display:flex;flex-direction:column;align-items:center}
-.zb-hero h1>span{background:linear-gradient(110deg,#f4f7ff 20%,#bce0ff 42%,#fff 55%,#769cc5 75%,#e5f3ff);background-size:200% auto;background-clip:text;-webkit-text-fill-color:transparent;animation:zb-title-shine 9s linear infinite}
+.zb-hero h1>span{background:linear-gradient(110deg,#f4f7ff 20%,#bce0ff 42%,#fff 55%,#769cc5 75%,#e5f3ff);background-size:200% auto;background-clip:text;-webkit-text-fill-color:transparent;animation:zb-title-shine 9s steps(270,end) infinite}
 @keyframes zb-title-shine{to{background-position:200% center}}
 .zb-hero h1 small{font:400 12px/1.6 Manrope,sans-serif;letter-spacing:.85em;padding-left:.85em;color:#a6bcd7;margin-top:20px}
 .zb-hero__tagline{font:400 clamp(22px,2.5vw,29px)/1.5 Manrope,sans-serif;letter-spacing:-.045em;margin-top:29px;color:#e0e9f6}.zb-hero__tagline span{color:#8fbce5}

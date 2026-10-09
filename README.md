@@ -67,7 +67,8 @@ Las fuentes originales conservan su licencia en public/fonts/OFL.txt.
 
 ## Rendimiento de las animaciones
 
-El fondo apunta a 60 FPS con un reloj que conserva los intervalos fraccionarios de
+El fondo decorativo tiene un presupuesto de 30 dibujos por segundo para no
+competir con el scroll y las animaciones de la interfaz. Su reloj conserva los intervalos fraccionarios de
 las pantallas de 60–165 Hz. Su velocidad depende del tiempo real, sin reducir las
 partículas, los brillos, las estelas ni los desenfoques. Los reflejos de las tarjetas
 agrupan los movimientos del puntero una vez por fotograma; el flotado lateral usa
@@ -79,6 +80,15 @@ pausan y continúan desde el mismo punto al volver. El paralaje modifica solo su
 capa visual, sin volver a renderizar el catálogo durante el scroll. Los WebP del
 logo y la portada conservan los píxeles RGBA de los PNG originales. El favicon usa
 su propia versión de 64 px. Las estadísticas se consultan en paralelo en el cliente.
+
+Las auroras rasterizan su degradado y desenfoque de 85 px al cambiar de tamaño y
+reutilizan la textura al animar su transformación y opacidad. Mantienen posición,
+colores, halo y duraciones. El título conserva sus letras y degradado con un
+presupuesto de 30 cambios de color por segundo, manteniendo su ciclo de 9 segundos.
+Las auroras conservan el CSS original como respaldo cuando el navegador no
+soporta la preparación de texturas. El canvas de estrellas ya no modifica atributos
+del DOM en cada dibujo. La prueba local de renderizado y scroll está fuera del
+código publicado; sus tiempos de callbacks no se presentan como FPS de pantalla.
 
 El retorno de FiveM usa `auth_callback=1`, sin colisionar con el `success` de Tebex.
 La identidad se confirma contra la cesta antes de limpiar el callback. `npm run
