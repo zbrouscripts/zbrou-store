@@ -65,8 +65,13 @@ export const useBasketStore = defineStore("basket", () => {
 
     // Get the current basket from the API
     async function getBasket() {
+        // The persisted basket also lets a callback recover if its cookie has
+        // expired or was not available during the initial server render.
+        if (!basketId.value && basket.value?.ident) {
+            basketId.value = basket.value.ident;
+        }
         // No basket is present
-        if (basketId.value === null)
+        if (!basketId.value)
             return;
 
         try {

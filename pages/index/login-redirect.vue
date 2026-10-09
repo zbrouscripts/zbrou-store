@@ -7,7 +7,7 @@
       <template v-else>
         <StoreGlyph name="fivem" :size="34" /><span class="zb-eyebrow">CUENTA FIVEM</span><h2>Tu acceso a ZBrou.</h2><p>Conecta tu cuenta a través de Tebex para gestionar tu compra.</p>
         <p v-if="fetching" role="status">Conectando con Tebex…</p>
-        <template v-else-if="methods.length"><button v-for="method in methods" :key="method.name" class="zb-btn zb-btn--primary" type="button" :disabled="isLoading" @click="loginRedirect(method)"><StoreGlyph name="fivem" :size="18" />{{ isLoading ? 'Abriendo acceso…' : 'Acceder con ' + method.name }}<StoreGlyph name="external" :size="17" /></button></template>
+        <template v-else-if="methods.length"><p v-if="message" class="zb-auth__error" role="alert">{{ message }}</p><button v-for="method in methods" :key="method.name" class="zb-btn zb-btn--primary" type="button" :disabled="isLoading" @click="loginRedirect(method)"><StoreGlyph name="fivem" :size="18" />{{ isLoading ? 'Abriendo acceso…' : 'Acceder con ' + method.name }}<StoreGlyph name="external" :size="17" /></button></template>
         <template v-else><p class="zb-auth__error" role="status">{{ message || 'El acceso no está disponible en este momento.' }}</p><button class="zb-btn zb-btn--glass" type="button" @click="fetchMethods">Volver a intentar</button></template>
         <small>La autenticación continúa en el proveedor oficial.</small>
       </template>
@@ -26,9 +26,10 @@ async function fetchMethods() {
   catch { message.value = "No hemos podido conectar con Tebex. Inténtalo de nuevo en unos instantes."; }
   finally { fetching.value = false; }
 }
-function loginRedirect(method: BasketAuthMethod) {
+async function loginRedirect(method: BasketAuthMethod) {
   isLoading.value = true;
-  try { authStore.loginRedirect(method); } catch { isLoading.value = false; message.value = "No se ha podido abrir el acceso."; }
+  message.value = "";
+  try { await authStore.loginRedirect(method); } catch { isLoading.value = false; message.value = "No se ha podido abrir el acceso. Vuelve a intentarlo."; }
 }
 function logout() { authStore.logout(); open.value = false; }
 onMounted(() => { if (!authStore.isAuthenticated) fetchMethods(); else fetching.value = false; });

@@ -11,9 +11,9 @@ const context = { exports: {} };
 vm.runInNewContext(js, context);
 const { createFramePacer } = context.exports;
 
-for (const hz of [60, 75, 90, 120, 144, 165]) {
-    test(`keeps 30 FPS and real movement at ${hz} Hz with timing jitter`, () => {
-        const pacer = createFramePacer();
+for (const fps of [30, 60]) for (const hz of [60, 75, 90, 120, 144, 165]) {
+    test(`keeps ${fps} FPS and real movement at ${hz} Hz with timing jitter`, () => {
+        const pacer = createFramePacer(fps);
         const rendered = [];
         let elapsed = 0;
         for (let i = 0; i < hz * 20; i++) {
@@ -21,9 +21,9 @@ for (const hz of [60, 75, 90, 120, 144, 165]) {
             const dt = pacer.sample(timestamp);
             if (dt !== null) { rendered.push(timestamp); elapsed += dt; }
         }
-        assert.ok(Math.abs(rendered.length / 20 - 30) < 0.1, 'must not drift down to 20–25 FPS');
+        assert.ok(Math.abs(rendered.length / 20 - fps) < 0.1, 'must not lose frames to clock drift');
         assert.ok(Math.abs(elapsed - (rendered.at(-1) - rendered[0]) / 1000) < 0.00001, 'fractional frame time must not accelerate movement');
-        assert.ok(rendered.slice(1).every((time, i) => time - rendered[i] >= 1000 / 30 - 1000 / hz - 0.5), 'must spread draws across refreshes');
+        assert.ok(rendered.slice(1).every((time, i) => time - rendered[i] >= 1000 / fps - 1000 / hz - 0.5), 'must spread draws across refreshes');
     });
 }
 

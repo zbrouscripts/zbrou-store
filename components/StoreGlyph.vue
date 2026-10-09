@@ -1,5 +1,5 @@
 <template>
-  <svg viewBox="0 0 24 24" :width="size" :height="size" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <svg :viewBox="name === 'fivem' ? '0 0 50.949 60' : '0 0 24 24'" :width="size" :height="size" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <template v-if="name === 'arrow'"><path d="M5 12h14m-5-5 5 5-5 5" /></template>
     <template v-else-if="name === 'external'"><path d="M7 17 17 7M7 7h10v10" /></template>
     <template v-else-if="name === 'down'"><path d="M12 4v16m-6-6 6 6 6-6" /></template>
@@ -13,7 +13,8 @@
     <template v-else-if="name === 'spark'"><path d="m12 2 2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8L12 2Z"/></template>
     <template v-else-if="name === 'pause'"><path d="M9 5v14m6-14v14"/></template>
     <template v-else-if="name === 'play'"><path d="m8 4 12 8-12 8V4Z"/></template>
-    <template v-else-if="name === 'fivem'"><path d="m12 2 9 19h-6l-3-8-3 8H3L12 2Z" fill="currentColor" stroke="none"/><path d="m11 7-5 11" stroke="#9aadc5"/></template>
+    <!-- Official FiveM mark: the three symbol subpaths from https://fivem.net/ (header logo). -->
+    <template v-else-if="name === 'fivem'"><path d="M10.959 27.123L19.509 1.473C19.803 0.591 20.625 0 21.552 0H30.99L32.787 5.403L10.959 27.123ZM35.67 14.07L27.624 22.107L38.817 60H50.949L35.67 14.07ZM5.148 44.553L0 60H12.123L21.588 28.137L5.148 44.556V44.553Z" fill="currentColor" stroke="none"/></template>
     <template v-else-if="name === 'discord'"><path d="M19.7 5.4a18.3 18.3 0 0 0-4.4-1.3l-.5 1a16.3 16.3 0 0 0-5.6 0l-.5-1a18.3 18.3 0 0 0-4.4 1.3C1.5 9.6.8 13.7 1.1 17.7a18.2 18.2 0 0 0 5.4 2.7l1.1-1.8-1.7-.8.4-.3a13.4 13.4 0 0 0 11.4 0l.4.3-1.7.8 1.1 1.8a18.2 18.2 0 0 0 5.4-2.7c.4-4.6-.8-8.6-3.2-12.3ZM8.3 14.9c-1.1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2Zm7.4 0c-1.1 0-1.9-1-1.9-2.2s.8-2.2 1.9-2.2 1.9 1 1.9 2.2-.8 2.2-1.9 2.2Z" fill="currentColor" stroke="none"/></template>
   </svg>
 </template>

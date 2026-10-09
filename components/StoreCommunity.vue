@@ -24,8 +24,9 @@
 </template>
 <script setup lang="ts">
 const { enabled } = useStoreMotion();
-const { data: usage, refresh: refreshUsage } = await useFetch("/api/usage");
-const { data: community, refresh: refreshCommunity } = await useFetch("/api/community");
+// Fetch independent below-the-fold feeds together after hydration; placeholders render immediately.
+const { data: usage, refresh: refreshUsage } = useFetch("/api/usage", { server: false, lazy: true });
+const { data: community, refresh: refreshCommunity } = useFetch("/api/community", { server: false, lazy: true });
 const section = ref<HTMLElement | null>(null), seen = ref(false);
 const metrics = computed(() => [
   { icon: "players", label: "Jugadores activos", description: "Jugando con scripts ZBrou", suffix: "", value: usage.value?.playersOnline },

@@ -3,7 +3,7 @@
     <a class="zb-skip" href="#scripts">Ir a los scripts</a>
     <section id="inicio" ref="hero" class="zb-hero" aria-labelledby="page-title">
       <div class="zb-hero__light" aria-hidden="true"></div>
-      <div class="zb-hero__content" :style="heroStyle">
+      <div ref="heroContent" class="zb-hero__content" style="transform:translateY(0px) scale(1);opacity:1">
         <span class="zb-eyebrow zb-hero__eyebrow"><i></i> RECURSOS PARA FIVEM</span>
         <img class="zb-hero__logo" :src="zbrouBrandImage" width="112" height="112" alt="Logotipo original de ZBrou" />
         <h1 id="page-title"><span>ZBROU</span><small>SCRIPTS</small></h1>
@@ -100,14 +100,22 @@ async function addToBasket(product: StoreProduct) {
   catch { message.value = "No se ha podido añadir el producto. Inténtalo de nuevo."; }
 }
 const { enabled: motionEnabled, toggle } = useStoreMotion();
-const hero = ref<HTMLElement | null>(null), progress = ref(0);
-const heroStyle = computed(() => ({ transform: "translateY(" + progress.value * 70 + "px) scale(" + (1 - progress.value * .08) + ")", opacity: 1 - progress.value * .8 }));
+useVisibleAnimations('.zb-hero, .zb-social, .zb-experience, .zb-community-cta');
+const hero = ref<HTMLElement | null>(null), heroContent = ref<HTMLElement | null>(null);
+let progress = -1;
+// Scroll only changes this layer; it must not re-render the catalogue and its children.
+function setHeroProgress(next: number) {
+  if (!heroContent.value || progress === next) return;
+  progress = next;
+  heroContent.value.style.transform = "translateY(" + next * 70 + "px) scale(" + (1 - next * .08) + ")";
+  heroContent.value.style.opacity = String(1 - next * .8);
+}
 let frame = 0, cardFrame = 0;
 let cardPointer: { node: HTMLElement; x: number; y: number } | null = null;
 function updateScene() {
   frame = 0;
   if (!motionEnabled.value || !hero.value) return;
-  const box = hero.value.getBoundingClientRect(); progress.value = Math.max(0, Math.min(1, -box.top / Math.max(1, box.height)));
+  const box = hero.value.getBoundingClientRect(); setHeroProgress(Math.max(0, Math.min(1, -box.top / Math.max(1, box.height))));
 }
 function scheduleScene() { if (!frame) frame = requestAnimationFrame(updateScene); }
 function moveCard(event: PointerEvent) {
@@ -129,7 +137,7 @@ function clearCard() {
   cardPointer = null;
 }
 function resetCard() { clearCard(); }
-watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else { progress.value = 0; clearCard(); } });
+watch(motionEnabled, enabled => { if (enabled) scheduleScene(); else { setHeroProgress(0); clearCard(); } });
 onMounted(() => { window.addEventListener("scroll", scheduleScene, { passive: true }); window.addEventListener("resize", scheduleScene, { passive: true }); scheduleScene(); });
 onUnmounted(() => { cancelAnimationFrame(frame); clearCard(); window.removeEventListener("scroll", scheduleScene); window.removeEventListener("resize", scheduleScene); });
 </script>

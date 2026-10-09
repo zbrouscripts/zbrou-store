@@ -1,6 +1,7 @@
 import { StorageSerializers, useStorage } from "@vueuse/core";
 import { skipHydrate } from "pinia";
 import type { BasketAuthMethod, Auth } from "~/types";
+import { getAuthRedirect } from "~/utils/authCallback";
 
 export const useAuthStore = defineStore("auth", () => {
     const appConfig = useAppConfig();
@@ -29,13 +30,16 @@ export const useAuthStore = defineStore("auth", () => {
         }
     }
 
-    function loginRedirect(method: BasketAuthMethod) {
+    async function loginRedirect(method: BasketAuthMethod) {
         auth.value = {
             ...auth.value,
             method,
         };
 
         try {
+            // Allow the storage/cookie watchers to persist the current basket
+            // before leaving the site for the external identity provider.
+            await nextTick();
             window.location.replace(method.url);
         } catch (error) {
             auth.value.method = undefined;
@@ -46,14 +50,19 @@ export const useAuthStore = defineStore("auth", () => {
     async function getAuthMethods(
         redirectAfter?: string,
     ): Promise<BasketAuthMethod[]> {
-        if (!basketStore.basket) {
+        if (!basketStore.basket || basketStore.basket.complete) {
             await basketStore.createBasket();
         }
 
+        basketStore.basketId = basketStore.basket.ident;
+
         const returnUrl = new URL("/", window.location.origin);
-        returnUrl.searchParams.set("success", "true");
-        if (redirectAfter?.startsWith("/") && !redirectAfter.startsWith("//")) {
-            returnUrl.searchParams.set("redirect", redirectAfter);
+        // `success` belongs to Tebex and can be appended again by its callback.
+        // Our separate marker survives regardless of the provider's flag format.
+        returnUrl.searchParams.set("auth_callback", "1");
+        const redirect = getAuthRedirect(redirectAfter);
+        if (redirect !== "/") {
+            returnUrl.searchParams.set("redirect", redirect);
         }
         return await getBasketAuthMethods(
             basketStore.basket.ident,
@@ -64,7 +73,7 @@ export const useAuthStore = defineStore("auth", () => {
     async function loginCompleted() {
         const basket = await basketStore.getBasket();
 
-        if (!basket?.value.username || !basket?.value.username_id) {
+        if (!basket?.value?.username || !basket.value.username_id) {
             throw new Error("Failed to login!");
         }
 
@@ -90,9 +99,10 @@ export const useAuthStore = defineStore("auth", () => {
     });
 
     function getLoginRoute(redirectAfter?: string) {
+        const redirect = getAuthRedirect(redirectAfter);
         return (
             loginRoute.value +
-            (redirectAfter ? `?redirect=${encodeURIComponent(redirectAfter)}` : "")
+            (redirect !== "/" ? `?redirect=${encodeURIComponent(redirect)}` : "")
         );
     }
 

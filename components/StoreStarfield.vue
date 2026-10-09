@@ -13,7 +13,7 @@ onMounted(() => {
   const node = canvas.value, ctx = node.getContext('2d');
   if (!ctx) return;
   let width = 0, height = 0, stars = [], frame = 0, time = 0, ticks = 0;
-  const pacer = createFramePacer(30);
+  const pacer = createFramePacer(60);
   let targetX = 0, targetY = 0, offsetX = 0, offsetY = 0;
   function resize() {
     width = document.documentElement.clientWidth; height = innerHeight;

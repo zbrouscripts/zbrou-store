@@ -3,6 +3,7 @@
 html{background:var(--zb-bg);scroll-padding-top:115px}body{background:var(--zb-bg);color:var(--zb-white)}
 html[data-zb-motion="on"]{scroll-behavior:smooth}html[data-zb-motion="off"]{scroll-behavior:auto}
 html[data-zb-motion="off"] *,html[data-zb-motion="off"] *::before,html[data-zb-motion="off"] *::after{animation-play-state:paused!important;transition-duration:0ms!important;scroll-behavior:auto!important}
+[data-zb-animation-visible="false"],[data-zb-animation-visible="false"]::before,[data-zb-animation-visible="false"]::after,[data-zb-animation-visible="false"] *,[data-zb-animation-visible="false"] *::before,[data-zb-animation-visible="false"] *::after{animation-play-state:paused!important}
 .layout--default{isolation:isolate;width:100%;font-family:Manrope,Arial,sans-serif}
 .zb-shell{width:min(1400px,calc(100% - 96px));margin-inline:auto}.zb-store{position:relative;z-index:1;overflow:clip}
 .zb-store a,.zb-header a,.zb-footer a{color:inherit;text-decoration:none}.zb-store a:hover,.zb-header a:hover,.zb-footer a:hover{text-decoration:none}

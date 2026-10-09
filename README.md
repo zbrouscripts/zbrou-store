@@ -67,10 +67,20 @@ Las fuentes originales conservan su licencia en public/fonts/OFL.txt.
 
 ## Rendimiento de las animaciones
 
-El fondo mantiene 30 FPS con un reloj que conserva los intervalos fraccionarios de
+El fondo apunta a 60 FPS con un reloj que conserva los intervalos fraccionarios de
 las pantallas de 60–165 Hz. Su velocidad depende del tiempo real, sin reducir las
 partículas, los brillos, las estelas ni los desenfoques. Los reflejos de las tarjetas
 agrupan los movimientos del puntero una vez por fotograma; el flotado lateral usa
 traslación en lugar de recalcular la distribución de la página. `npm run test:motion`
 comprueba cadencia, velocidad, pausas y recuperación tras un bloqueo del navegador.
+
+Las animaciones decorativas alejadas de la pantalla o en una pestaña oculta se
+pausan y continúan desde el mismo punto al volver. El paralaje modifica solo su
+capa visual, sin volver a renderizar el catálogo durante el scroll. Los WebP del
+logo y la portada conservan los píxeles RGBA de los PNG originales. El favicon usa
+su propia versión de 64 px. Las estadísticas se consultan en paralelo en el cliente.
+
+El retorno de FiveM usa `auth_callback=1`, sin colisionar con el `success` de Tebex.
+La identidad se confirma contra la cesta antes de limpiar el callback. `npm run
+test:auth` comprueba los parámetros, la persistencia y la recuperación de errores.
 

@@ -1,6 +1,6 @@
 <template>
     <Head>
-        <link rel="icon" type="image/png" :href="zbrouBrandImage" />
+        <link rel="icon" type="image/png" sizes="64x64" :href="zbrouFaviconImage" />
     </Head>
 
     <NuxtLayout>
@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts" setup>
-import { zbrouBrandImage } from "~/utils/brandImages";
+import { zbrouFaviconImage } from "~/utils/brandImages";
+import { getAuthRedirect, isLoginCallback } from "~/utils/authCallback";
 import "~/assets/styles/main.scss";
 import "~/assets/styles/brand-fonts.css";
 import "~/assets/styles/storefront.css";
@@ -69,14 +70,14 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
-    if (route.query.success !== "true") return;
-    const redirect = typeof route.query.redirect === "string" ? route.query.redirect : "/";
-    await router.replace(redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/");
+    if (!isLoginCallback(route.query)) return;
+    const redirect = getAuthRedirect(route.query.redirect);
     try {
         await authStore.loginCompleted();
+        await router.replace(redirect);
         toastStore.addToast("Has iniciado sesión correctamente.", { type: "success" });
     } catch {
-        toastStore.addToast("No se ha podido completar el acceso. Vuelve a intentarlo.", { type: "error" });
+        toastStore.addToast("No se ha podido confirmar el acceso con Tebex. Recarga para reintentar o vuelve a acceder con FiveM.", { type: "error", timeout: 10000 });
     }
 });
 </script>
