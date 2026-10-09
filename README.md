@@ -24,9 +24,14 @@ variables y regalos de Tebex.
 
 Los productos proceden del catálogo público de Tebex. Para añadir uno, crear un
 paquete en Tebex con nombre, descripción, portada, precio y entrega, asignarlo a una
-categoría visible y publicarlo. Su tarjeta, categoría, precio, compra y ficha aparecen
+categoría visible y publicarlo. Su tarjeta, precio, compra y ficha aparecen
 automáticamente en la tienda al recargar; no es necesario editar tarjetas en código.
 La descripción se muestra como texto seguro. El checkout calcula el importe final.
+
+La colección muestra únicamente «Todos», con búsqueda y ordenación. Los filtros
+por categorías quedan pendientes de definir; no se generan a partir del paquete
+provisional. La portada conserva «Dale a tu comunidad algo que se sienta diferente»,
+con el logo y las acciones principales, sin los lemas laterales ni la lista de frameworks.
 
 Los productos, perfiles y cifras de demostración se han retirado del código.
 
@@ -70,9 +75,9 @@ Las fuentes originales conservan su licencia en public/fonts/OFL.txt.
 El fondo decorativo tiene un presupuesto de 30 dibujos por segundo para no
 competir con el scroll y las animaciones de la interfaz. Su reloj conserva los intervalos fraccionarios de
 las pantallas de 60–165 Hz. Su velocidad depende del tiempo real, sin reducir las
-partículas, los brillos, las estelas ni los desenfoques. Los reflejos de las tarjetas
-agrupan los movimientos del puntero una vez por fotograma; el flotado lateral usa
-traslación en lugar de recalcular la distribución de la página. `npm run test:motion`
+partículas, los brillos, las estelas ni los desenfoques. El fondo se anima por sí
+solo y no se desplaza al mover el ratón. Los reflejos de las tarjetas
+agrupan los movimientos del puntero una vez por fotograma. `npm run test:motion`
 comprueba cadencia, velocidad, pausas y recuperación tras un bloqueo del navegador.
 
 Las animaciones decorativas alejadas de la pantalla o en una pestaña oculta se
@@ -90,13 +95,15 @@ soporta la preparación de texturas. El canvas de estrellas ya no modifica atrib
 del DOM en cada dibujo. La prueba local de renderizado y scroll está fuera del
 código publicado; sus tiempos de callbacks no se presentan como FPS de pantalla.
 
-Las tarjetas aplican la última posición del ratón en el siguiente fotograma,
-sin encadenar transiciones de 250 ms. El reflejo conserva su radio y color,
+El reflejo de las tarjetas aplica la última posición del ratón en el siguiente
+fotograma. La inclinación usa una interpolación breve de 35 ms, sin encadenar
+transiciones de 250 ms ni mantener un bucle cuando ya está en reposo.
+El reflejo conserva su radio y color,
 pero mueve una capa con el degradado fijo en vez de repintarlo. Las coordenadas
 se calculan al empezar a seguir el puntero y se ajustan al scroll; no se leen de
 la tarjeta ya inclinada en cada movimiento. El retorno suave al salir se mantiene.
-El paralaje del fondo conserva su recorrido y profundidad con una respuesta
-del 90 % en unos 81 ms, independiente de la cadencia de dibujo.
+La inclinación alcanza el 90 % del objetivo en unos 81 ms,
+independientemente de la frecuencia de refresco.
 
 El retorno de FiveM usa `auth_callback=1`, sin colisionar con el `success` de Tebex.
 La identidad se confirma contra la cesta antes de limpiar el callback. `npm run

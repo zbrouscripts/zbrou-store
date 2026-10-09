@@ -4,7 +4,7 @@ type PointerRuntime = {
     scroll: () => { x: number; y: number };
 };
 
-/** Follow input promptly, with the same settling time at any draw cadence. */
+/** A short, refresh-independent ease for the card tilt; reflections stay direct. */
 export function followPointer(current: number, target: number, seconds: number) {
     return current + (target - current) * (1 - Math.exp(-Math.max(0, seconds) / 0.035));
 }
@@ -16,11 +16,13 @@ export function createProductMotion(enabled: () => boolean, runtime: PointerRunt
     scroll: () => ({ x: window.scrollX, y: window.scrollY }),
 }) {
     let frame = 0;
+    let lastTime: number | null = null;
     let pointer: { node: HTMLElement; x: number; y: number } | null = null;
     let active: {
         node: HTMLElement;
         shine: HTMLElement | null;
         left: number; top: number; width: number; height: number;
+        tiltX: number; tiltY: number;
     } | null = null;
 
     function release() {
@@ -30,6 +32,7 @@ export function createProductMotion(enabled: () => boolean, runtime: PointerRunt
         active.node.style.removeProperty('transform');
         active.shine?.style.removeProperty('transform');
         active = null;
+        lastTime = null;
     }
 
     function reset() {
@@ -39,7 +42,7 @@ export function createProductMotion(enabled: () => boolean, runtime: PointerRunt
         release();
     }
 
-    function update() {
+    function update(timestamp: number) {
         frame = 0;
         if (!enabled() || !pointer) { reset(); return; }
         const { node, x, y } = pointer;
@@ -51,17 +54,28 @@ export function createProductMotion(enabled: () => boolean, runtime: PointerRunt
             const box = node.getBoundingClientRect();
             active = { node, shine: node.querySelector<HTMLElement>('.zb-product__shine'),
                 left: box.left + scroll.x, top: box.top + scroll.y,
-                width: Math.max(1, box.width), height: Math.max(1, box.height) };
+                width: Math.max(1, box.width), height: Math.max(1, box.height), tiltX: 0, tiltY: 0 };
             node.classList.add('zb-product--tracking');
         }
         const localX = x + scroll.x - active.left;
         const localY = y + scroll.y - active.top;
         const tiltX = (Math.max(0, Math.min(1, localY / active.height)) - .5) * -4;
         const tiltY = (Math.max(0, Math.min(1, localX / active.width)) - .5) * 5;
-        // No transform transition during tracking: each frame uses the latest
-        // input rather than easing towards a target that keeps moving.
-        node.style.transform = `perspective(850px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-        if (active.shine) active.shine.style.transform = `translate3d(${localX - 250}px,${localY - 250}px,0)`;
+        const seconds = lastTime === null ? 1 / 60 : Math.min(.05, Math.max(0, (timestamp - lastTime) / 1000));
+        lastTime = timestamp;
+        active.tiltX = followPointer(active.tiltX, tiltX, seconds);
+        active.tiltY = followPointer(active.tiltY, tiltY, seconds);
+        const settling = Math.abs(active.tiltX - tiltX) > .01 || Math.abs(active.tiltY - tiltY) > .01;
+        if (!settling) { active.tiltX = tiltX; active.tiltY = tiltY; }
+        // Ease the small rotation only, with no restartable CSS transition.
+        // The reflection still uses the latest pointer position immediately.
+        node.style.transform = `perspective(850px) rotateX(${active.tiltX}deg) rotateY(${active.tiltY}deg)`;
+        if (active.shine) {
+            const reflection = `translate3d(${localX - 250}px,${localY - 250}px,0)`;
+            if (active.shine.style.transform !== reflection) active.shine.style.transform = reflection;
+        }
+        if (settling) frame = runtime.requestFrame(update);
+        else lastTime = null;
     }
 
     function move(event: PointerEvent) {

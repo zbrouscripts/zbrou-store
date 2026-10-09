@@ -12,7 +12,7 @@ const { createProductMotion, followPointer } = scope.exports;
 
 function setup() {
     const tasks = new Map();
-    let sequence = 0, enabled = true, scroll = { x: 0, y: 600 };
+    let sequence = 0, timestamp = 0, enabled = true, scroll = { x: 0, y: 600 };
     const motion = createProductMotion(() => enabled, {
         requestFrame(fn) { tasks.set(++sequence, fn); return sequence; },
         cancelFrame(id) { tasks.delete(id); }, scroll: () => scroll,
@@ -30,12 +30,13 @@ function setup() {
     }
     return { motion, tasks, node,
         move(node, x, y, type = 'mouse') { motion.move({ currentTarget: node, clientX: x, clientY: y, pointerType: type }); },
-        flush() { for (const [id, fn] of tasks) { tasks.delete(id); fn(); } },
+        flush(seconds = 1 / 60) { timestamp += seconds * 1000; for (const [id, fn] of [...tasks]) { tasks.delete(id); fn(timestamp); } },
+        settle() { for (let i = 0; i < 60 && tasks.size; i++) this.flush(); assert.equal(tasks.size, 0, 'no idle animation loop'); },
         disable() { enabled = false; }, scroll(value) { scroll = value; },
     };
 }
 
-test('rapid pointer input applies the newest position on the next frame, without a catch-up queue', () => {
+test('reflection follows the newest position immediately while tilt eases briefly without a catch-up queue', () => {
     const h = setup(), node = h.node();
     for (let i = 0; i < 100; i++) h.move(node, 120 + i, 240 + i);
     assert.equal(h.tasks.size, 1);
@@ -44,12 +45,16 @@ test('rapid pointer input applies the newest position on the next frame, without
     h.flush();
     assert.equal(node.reads(), 1);
     assert.equal(node.shine.style.transform, 'translate3d(-131px,-111px,0)');
-    assert.equal(node.style.transform, `perspective(850px) rotateX(${(139 / 450 - .5) * -4}deg) rotateY(${(119 / 300 - .5) * 5}deg)`);
+    const targetX = (139 / 450 - .5) * -4, targetY = (119 / 300 - .5) * 5;
+    assert.equal(node.style.transform, `perspective(850px) rotateX(${followPointer(0, targetX, 1 / 60)}deg) rotateY(${followPointer(0, targetY, 1 / 60)}deg)`);
     assert.equal(node.classes.has('zb-product--tracking'), true);
-    assert.equal(h.tasks.size, 0);
+    assert.equal(h.tasks.size, 1);
     h.move(node, 370, 590); h.flush();
     assert.equal(node.reads(), 1);
     assert.equal(node.shine.style.transform, 'translate3d(20px,140px,0)');
+    h.settle();
+    assert.equal(node.style.transform, `perspective(850px) rotateX(${(390 / 450 - .5) * -4}deg) rotateY(${(270 / 300 - .5) * 5}deg)`);
+    assert.equal(node.reads(), 1);
 });
 
 test('scroll moves the pointer origin without measuring already tilted geometry again', () => {
@@ -97,13 +102,13 @@ test('pause drops queued work and touch input does not start pointer animations'
 
 test('pointer positions near projected edges cannot tilt a card beyond its original range', () => {
     const h = setup(), node = h.node();
-    h.move(node, 80, 180); h.flush();
+    h.move(node, 80, 180); h.settle();
     assert.equal(node.style.transform, 'perspective(850px) rotateX(2deg) rotateY(-2.5deg)');
-    h.move(node, 420, 680); h.flush();
+    h.move(node, 420, 680); h.settle();
     assert.equal(node.style.transform, 'perspective(850px) rotateX(-2deg) rotateY(2.5deg)');
 });
 
-test('background input settles promptly and consistently across draw cadences', () => {
+test('card tilt easing has the same brief response across refresh rates and never overshoots', () => {
     for (const hz of [30, 60, 90, 120, 144, 165]) {
         let value = 0, elapsed = 0;
         while (elapsed < .1) { const dt = Math.min(1 / hz, .1 - elapsed); value = followPointer(value, 45, dt); elapsed += dt; }
@@ -114,4 +119,18 @@ test('background input settles promptly and consistently across draw cadences', 
     assert.equal(followPointer(0, 45, -1), 0);
     assert.ok(followPointer(0, 45, 2) <= 45);
     assert.ok(followPointer(45, -45, .1) >= -45);
+});
+
+test('sustained input and reversal keep a single bounded loop that stops after settling', () => {
+    const h = setup(), node = h.node();
+    for (let i = 0; i < 300; i++) {
+        for (let j = 0; j < 20; j++) h.move(node, i % 2 ? 370 : 130, 425);
+        assert.equal(h.tasks.size, 1);
+        h.flush();
+        assert.ok(h.tasks.size <= 1);
+    }
+    assert.equal(node.reads(), 1);
+    h.move(node, 130, 425); h.settle();
+    assert.equal(node.shine.style.transform, 'translate3d(-220px,-25px,0)');
+    assert.equal(node.style.transform, 'perspective(850px) rotateX(0deg) rotateY(-2deg)');
 });

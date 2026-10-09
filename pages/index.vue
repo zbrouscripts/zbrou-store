@@ -7,26 +7,21 @@
         <span class="zb-eyebrow zb-hero__eyebrow"><i></i> RECURSOS PARA FIVEM</span>
         <img class="zb-hero__logo" :src="zbrouBrandImage" width="112" height="112" alt="Logotipo original de ZBrou" />
         <h1 id="page-title"><span>ZBROU</span><small>SCRIPTS</small></h1>
-        <p class="zb-hero__tagline">Tu servidor. <span>Tu estilo.</span></p>
         <p class="zb-hero__copy">Dale a tu comunidad algo que se sienta diferente.</p>
         <div class="zb-hero__actions">
           <a class="zb-btn zb-btn--primary" href="#scripts"><StoreGlyph name="spark" :size="18" />Ver scripts<StoreGlyph name="arrow" :size="19" /></a>
           <a class="zb-btn zb-btn--glass" href="#comunidad"><StoreGlyph name="discord" :size="20" />La comunidad</a>
         </div>
-        <div class="zb-hero__meta"><span><StoreGlyph name="code" :size="15" />ESX · QBCore · Qbox · Standalone</span><span><StoreGlyph name="shield" :size="15" />Checkout con Tebex</span></div>
+        <div class="zb-hero__meta"><span><StoreGlyph name="shield" :size="15" />Checkout con Tebex</span></div>
       </div>
-      <div class="zb-hero__side zb-hero__side--left" aria-hidden="true"><span class="zb-orbit-dot"></span> HECHO PARA TU SERVIDOR <small>01 / ZBROU COLLECTION</small></div>
-      <div class="zb-hero__side zb-hero__side--right" aria-hidden="true"><StoreGlyph name="code" :size="18" /> TU PRÓXIMO SCRIPT.<small>HECHO POR ZBROU.</small></div>
       <a class="zb-scroll-cue" href="#scripts" aria-label="Bajar al catálogo"><span>EXPLORA LA COLECCIÓN</span><StoreGlyph name="down" :size="18" /></a>
     </section>
-
-    <div class="zb-frameworks zb-shell"><span>UN MISMO ESTILO.<br /><strong>TU FRAMEWORK.</strong></span><div><b>ESX</b><b>QBCore</b><b>Qbox</b><b>Standalone</b><b class="zb-frameworks__fivem"><StoreGlyph name="fivem" :size="22" />FiveM</b></div></div>
 
     <section id="scripts" class="zb-catalog zb-shell" aria-labelledby="catalog-title">
       <div class="zb-section-heading"><span class="zb-eyebrow">LA COLECCIÓN</span><h2 id="catalog-title">Un nuevo nivel para <em>tu servidor.</em></h2><p>Explora los scripts. Encuentra el que encaja contigo.</p></div>
       <div class="zb-catalog__toolbar">
-        <div class="zb-filters" role="group" aria-label="Filtrar por tipo">
-          <button v-for="filter in filters" :key="filter" type="button" :class="{ active: selectedFilter === filter }" :aria-pressed="selectedFilter === filter" @click="selectedFilter = filter">{{ filter }}<small v-if="filter === 'Todos'">{{ products.length }}</small></button>
+        <div class="zb-filters" role="group" aria-label="Catálogo">
+          <button class="active" type="button" aria-pressed="true" @click="query = ''">Todos<small>{{ products.length }}</small></button>
         </div>
         <label class="zb-search"><StoreGlyph name="search" :size="19" /><span class="sr-only">Buscar scripts</span><input v-model="query" type="search" aria-label="Buscar scripts" placeholder="Busca tu próximo script…" autocomplete="off" /></label>
         <label class="zb-sort"><span class="sr-only">Ordenar scripts</span><select v-model="sort" aria-label="Ordenar scripts"><option value="featured">Destacados</option><option value="name">Nombre: A–Z</option><option value="price">Precio: menor primero</option></select></label>
@@ -38,12 +33,11 @@
           <div class="zb-product__art">
             <a class="zb-product__image-link" :href="product.href" target="_blank" rel="noopener noreferrer" :aria-label="'Ver detalles de ' + product.name + ' en una pestaña nueva'">
               <img :src="product.image" :alt="'Portada de ' + product.name" width="1536" height="1024" loading="lazy" />
-              <span class="zb-product__badge">ZBROU ORIGINAL</span>
             </a>
             <button class="zb-product__open" type="button" :disabled="!product.pkg || busyId !== null" :aria-label="'Añadir ' + product.name + ' a la cesta'" :aria-busy="busyId === product.pkg?.id" :title="product.pkg ? 'Añadir a la cesta' : 'Próximamente en Tebex'" @click="addToBasket(product)"><StoreGlyph name="cart" :size="22" /></button>
           </div>
           <div class="zb-product__body">
-            <div class="zb-product__category"><span>{{ product.category }}</span><span>FIVEM</span></div>
+            <div class="zb-product__category"><span>Todos</span><span>FIVEM</span></div>
             <h3><a :href="product.href" target="_blank" rel="noopener noreferrer">{{ product.name }}</a></h3>
             <p>{{ product.description }}</p>
             <div class="zb-product__bottom"><div><small>{{ product.pkg ? 'DESDE' : 'DISPONIBILIDAD' }}</small><strong>{{ product.pkg ? $n(product.price, 'currency') : 'Próximamente' }}</strong></div><a class="zb-product__detail" :href="product.href" target="_blank" rel="noopener noreferrer" :aria-label="'Detalles de ' + product.name"><StoreGlyph name="arrow" :size="21" /></a></div>
@@ -53,7 +47,7 @@
           </div>
         </article>
       </div>
-      <div v-else class="zb-empty"><StoreGlyph name="search" :size="32" /><h3>No hemos encontrado ese script.</h3><p>Prueba otro nombre o vuelve a ver la colección.</p><button class="zb-btn zb-btn--glass" type="button" @click="query = ''; selectedFilter = 'Todos'">Ver todos los scripts</button></div>
+      <div v-else class="zb-empty"><StoreGlyph name="search" :size="32" /><h3>No hemos encontrado ese script.</h3><p>Prueba otro nombre o vuelve a ver la colección.</p><button class="zb-btn zb-btn--glass" type="button" @click="query = ''">Ver todos los scripts</button></div>
     </section>
 
     <StoreCommunity />
@@ -72,7 +66,7 @@
       <a v-if="discordUrl" class="zb-btn zb-btn--primary" :href="discordUrl" target="_blank" rel="noopener noreferrer"><StoreGlyph name="discord" :size="21" />Entrar en Discord<StoreGlyph name="external" :size="18" /></a>
       <div v-else class="zb-community-cta__pending"><span class="zb-btn zb-btn--glass"><StoreGlyph name="discord" :size="21" />Discord · próximamente</span><small>Enlace de la comunidad pendiente.</small></div>
     </section>
-    <div class="zb-motion-bar zb-shell"><span>ZBROU SCRIPTS <i>·</i> HECHO PARA TU SERVIDOR</span><button type="button" class="zb-motion-control" :aria-pressed="motionEnabled" @click="toggle"><StoreGlyph :name="motionEnabled ? 'pause' : 'play'" :size="15" />{{ motionEnabled ? 'Pausar animaciones' : 'Activar animaciones' }}</button></div>
+    <div class="zb-motion-bar zb-shell"><span>ZBROU SCRIPTS</span><button type="button" class="zb-motion-control" :aria-pressed="motionEnabled" @click="toggle"><StoreGlyph :name="motionEnabled ? 'pause' : 'play'" :size="15" />{{ motionEnabled ? 'Pausar animaciones' : 'Activar animaciones' }}</button></div>
     <NuxtPage />
   </main>
 </template>
@@ -86,11 +80,10 @@ const discordUrl = computed(() => String(config.public.discordUrl || useAppConfi
 const categoryStore = useCategoryStore();
 const { data: categories } = await useAsyncData("categories", () => categoryStore.fetchCategories());
 const products = computed(() => getCatalogProducts(categories.value ?? []));
-const query = ref(""), sort = ref("featured"), selectedFilter = ref("Todos");
-const filters = computed(() => ["Todos", ...new Set(products.value.map(product => product.category))]);
+const query = ref(""), sort = ref("featured");
 const normalize = (value: string) => value.toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const visibleProducts = computed(() => {
-  const items = products.value.filter(p => (selectedFilter.value === "Todos" || p.category === selectedFilter.value) && normalize(p.name + " " + p.category + " fivem").includes(normalize(query.value.trim())));
+  const items = products.value.filter(p => normalize(p.name + " fivem").includes(normalize(query.value.trim())));
   return sort.value === "name" ? items.sort((a, b) => a.name.localeCompare(b.name, "es")) : sort.value === "price" ? items.sort((a, b) => a.price - b.price) : items;
 });
 const { busyId, addProduct } = useProductCart();

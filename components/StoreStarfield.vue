@@ -7,7 +7,6 @@
 <script setup>
 import { createFramePacer } from '~/utils/framePacer';
 import { renderAuroraTexture } from '~/utils/auroraTexture';
-import { followPointer } from '~/utils/pointerMotion';
 const props = defineProps({ enabled: { type: Boolean, default: false } });
 const canvas = ref(null);
 const auroraOne = ref(null), auroraTwo = ref(null);
@@ -18,7 +17,6 @@ onMounted(() => {
   let width = 0, height = 0, stars = [], frame = 0, time = 0, textureTimer = 0;
   // The decorative field has its own budget, leaving time for scroll and foreground effects.
   const pacer = createFramePacer(30);
-  let targetX = 0, targetY = 0, offsetX = 0, offsetY = 0;
   function prepareAuroras() {
     const textureWidth = Math.max(innerWidth * .75, 580), textureHeight = innerHeight * .65;
     for (const [texture, color] of [[auroraOne.value, '#416ee5'], [auroraTwo.value, '#277d98']]) {
@@ -42,12 +40,11 @@ onMounted(() => {
   }
   function draw(dt) {
     time += dt; ctx.clearRect(0, 0, width, height);
-    offsetX = followPointer(offsetX, targetX, dt); offsetY = followPointer(offsetY, targetY, dt);
     for (const star of stars) {
       star.x += dt * (6 + star.depth * 12); star.y -= dt * (10 + star.depth * 18);
       if (star.y < -10) { star.y = height + 10; star.x = Math.random() * width; }
       if (star.x > width + 10) star.x = -10;
-      const x = star.x + offsetX * star.depth, y = star.y + offsetY * star.depth;
+      const x = star.x, y = star.y;
       ctx.globalAlpha = star.alpha * (.65 + .35 * Math.sin(time * 1.4 + star.phase));
       ctx.fillStyle = star.depth > .7 ? '#b4eaff' : '#7594c2';
       ctx.beginPath(); ctx.arc(x, y, .45 + star.depth * .8, 0, Math.PI * 2); ctx.fill();
@@ -76,14 +73,10 @@ onMounted(() => {
     cancelAnimationFrame(frame); pacer.reset();
     if (props.enabled && !document.hidden) frame = requestAnimationFrame(animate);
   }
-  function pointer(event) {
-    if (!props.enabled || event.pointerType === 'touch') return;
-    targetX = (event.clientX / width - .5) * 45; targetY = (event.clientY / height - .5) * 30;
-  }
   const unwatch = watch(() => props.enabled, sync);
-  window.addEventListener('resize', resize, { passive: true }); window.addEventListener('pointermove', pointer, { passive: true });
+  window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', sync); resize(); sync();
-  stop = () => { unwatch(); cancelAnimationFrame(frame); clearTimeout(textureTimer); window.removeEventListener('resize', resize); window.removeEventListener('pointermove', pointer); document.removeEventListener('visibilitychange', sync); };
+  stop = () => { unwatch(); cancelAnimationFrame(frame); clearTimeout(textureTimer); window.removeEventListener('resize', resize); document.removeEventListener('visibilitychange', sync); };
 });
 onUnmounted(() => stop());
 </script>
